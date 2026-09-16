@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lucky Neon Casino</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #5b21b6, transparent 35%),
+        linear-gradient(135deg, #09090b, #18181b 60%, #020617);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    .casino {
+      width: 100%;
+      max-width: 900px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 28px;
+      padding: 40px;
+      box-shadow: 0 0 60px rgba(168, 85, 247, 0.35);
+      backdrop-filter: blur(18px);
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.15);
+      color: #86efac;
+      font-size: 14px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(134, 239, 172, 0.3);
+    }
+
+    h1 {
+      font-size: 52px;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #facc15, #fb7185, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: #d4d4d8;
+      margin-bottom: 35px;
+      font-size: 18px;
+    }
+
+    .slots {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .slot {
+      width: 120px;
+      height: 120px;
+      background: #111827;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      border: 2px solid rgba(250, 204, 21, 0.5);
+      box-shadow: inset 0 0 25px rgba(250, 204, 21, 0.12);
+    }
+
+    .info {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 16px 24px;
+      border-radius: 18px;
+      min-width: 160px;
+    }
+
+    .card span {
+      display: block;
+      color: #a1a1aa;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .card strong {
+      font-size: 24px;
+      color: #facc15;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      padding: 16px 34px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #facc15, #f97316);
+      color: #111827;
+      font-size: 18px;
+      font-weight: bold;
+      transition: 0.2s;
+      box-shadow: 0 10px 30px rgba(249, 115, 22, 0.35);
+    }
+
+    button:hover {
+      transform: translateY(-3px) scale(1.03);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .message {
+      margin-top: 25px;
+      font-size: 22px;
+      min-height: 32px;
+      color: #fef3c7;
+    }
+
+    .notice {
+      margin-top: 35px;
+      font-size: 13px;
+      color: #a1a1aa;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 36px;
+      }
+
+      .casino {
+        padding: 25px;
+      }
+
+      .slot {
+        width: 85px;
+        height: 85px;
+        font-size: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="casino">
+    <div class="badge">🎮 Только демо-игра — без настоящих денег</div>
+
+    <h1>Lucky Neon Casino</h1>
+    <p class="subtitle">Крути барабаны, собирай совпадения и выигрывай виртуальные монеты.</p>
+
+    <div class="slots">
+      <div class="slot" id="slot1">🍒</div>
+      <div class="slot" id="slot2">🍋</div>
+      <div class="slot" id="slot3">⭐</div>
+    </div>
+
+    <div class="info">
+      <div class="card">
+        <span>Баланс</span>
+        <strong id="balance">1000</strong>
+      </div>
+
+      <div class="card">
+        <span>Ставка</span>
+        <strong>50</strong>
+      </div>
+    </div>
+
+    <button id="spinBtn" onclick="spin()">Крутить 🎰</button>
+
+    <div class="message" id="message">Нажми кнопку и испытай удачу!</div>
+
+    <p class="notice">
+      Это развлекательный фейковый сайт казино. Здесь нет регистрации, платежей и реальных ставок.
+    </p>
+  </main>
+
+  <script>
+    const symbols = ["🍒", "🍋", "⭐", "💎", "7️⃣", "🍀"];
+    let balance = 1000;
+    const bet = 50;
+
+    function randomSymbol() {
+      return symbols[Math.floor(Math.random() * symbols.length)];
+    }
+
+    function spin() {
+      const button = document.getElementById("spinBtn");
+      const message = document.getElementById("message");
+
+      if (balance < bet) {
+        message.textContent = "Недостаточно виртуальных монет!";
+        return;
+      }
+
+      balance -= bet;
+      updateBalance();
+
+      button.disabled = true;
+      message.textContent = "Барабаны крутятся...";
+
+      let spins = 0;
+      const interval = setInterval(() => {
+        document.getElementById("slot1").textContent = randomSymbol();
+        document.getElementById("slot2").textContent = randomSymbol();
+        document.getElementById("slot3").textContent = randomSymbol();
+
+        spins++;
+
+        if (spins > 15) {
+          clearInterval(interval);
+          button.disabled = false;
+          checkResult();
+        }
+      }, 90);
+    }
+
+    function checkResult() {
+      const s1 = document.getElementById("slot1").textContent;
+      const s2 = document.getElementById("slot2").textContent;
+      const s3 = document.getElementById("slot3").textContent;
+      const message = document.getElementById("message");
+
+      if (s1 === s2 && s2 === s3) {
+        balance += 500;
+        message.textContent = "Джекпот! Ты выиграл 500 монет!";
+      } else if (s1 === s2 || s2 === s3 || s1 === s3) {
+        balance += 120;
+        message.textContent = "Есть совпадение! Ты выиграл 120 монет!";
+      } else {
+        message.textContent = "Не повезло. Попробуй ещё раз!";
+      }
+
+      updateBalance();
+    }
+
+    function updateBalance() {
+      document.getElementById("balance").textContent = balance;
+    }
+  </script>
+</body>
+</html>
