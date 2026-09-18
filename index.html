@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Lucky Casino — рулетка</title>
+<title>Lucky Hub — казино, фото и инструменты</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -31,26 +31,26 @@
     font-family: var(--font);
     color: var(--ink);
     background: var(--bg);
-    padding: 28px clamp(16px, 3vw, 44px) 44px;
+    padding: 24px clamp(14px, 3vw, 44px) 56px;
   }
 
   button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
-  button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
-  .shell { max-width: 1160px; margin: 0 auto; }
+  .shell { max-width: 1180px; margin: 0 auto; }
 
   /* ---------- header ---------- */
   .top {
     display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
-    padding-bottom: 20px; margin-bottom: 32px; border-bottom: 1px solid var(--line);
+    padding-bottom: 18px; border-bottom: 1px solid var(--line);
   }
-  .brand h1 { font-weight: 500; font-size: clamp(24px, 3.2vw, 32px); letter-spacing: -.02em; line-height: 1.1; }
-  .brand p { margin-top: 4px; color: var(--muted); font-size: 14px; font-weight: 300; }
+  .brand h1 { font-weight: 500; font-size: clamp(22px, 3.2vw, 30px); letter-spacing: -.02em; line-height: 1.1; }
+  .brand p { margin-top: 4px; color: var(--muted); font-size: 13px; font-weight: 300; }
 
-  .wallet { display: flex; align-items: flex-end; gap: 22px; }
+  .wallet { display: flex; align-items: flex-end; gap: 18px; }
   .balance { text-align: right; }
   .balance small { display: block; font-size: 12px; color: var(--muted); margin-bottom: 2px; }
-  .balance strong { font-size: 28px; font-weight: 500; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .balance strong { font-size: 26px; font-weight: 500; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
   .balance.shake { animation: shake .4s; }
   @keyframes shake { 20%,60% { transform: translateX(-4px);} 40%,80% { transform: translateX(4px);} }
 
@@ -62,24 +62,81 @@
   .ghost:hover:not(:disabled) { color: var(--ink); border-color: var(--mark); }
   .ghost:disabled { opacity: .35; cursor: not-allowed; }
 
-  /* ---------- layout ---------- */
-  .layout { display: grid; grid-template-columns: minmax(300px, 460px) 1fr; gap: clamp(26px, 4.5vw, 64px); align-items: start; }
+  /* ---------- navigation ---------- */
+  .nav { display: flex; gap: 6px; flex-wrap: wrap; margin: 18px 0 22px; }
+  .nav button {
+    padding: 10px 16px; border-radius: 10px; font-size: 14px; color: var(--muted);
+    border: 1px solid var(--line); transition: color .2s, background .2s, border-color .2s;
+  }
+  .nav button:hover { color: var(--ink); border-color: var(--mark); }
+  .nav button[aria-selected="true"] { background: var(--ink); color: var(--ink-on-light); border-color: var(--ink); }
+  .subnav { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .subnav button {
+    padding: 8px 13px; border-radius: 20px; font-size: 13px; color: var(--muted); border: 1px solid var(--line);
+  }
+  .subnav button:hover { color: var(--ink); }
+  .subnav button[aria-selected="true"] { color: var(--ink-on-light); background: var(--light); border-color: var(--light); }
 
-  /* ---------- wheel ---------- */
-  .stage { display: flex; flex-direction: column; align-items: center; gap: 24px; }
-  .wheel-wrap { width: 100%; max-width: 460px; filter: drop-shadow(0 18px 26px rgba(0,0,0,.7)); }
+  .view, .page { display: none; }
+  .view.on, .page.on { display: block; animation: fade .25s ease-out; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ---------- generic blocks ---------- */
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .card h3 { font-size: 17px; font-weight: 500; margin-bottom: 4px; letter-spacing: -.01em; }
+  .card .hint { font-size: 13px; color: var(--muted); font-weight: 300; margin-bottom: 14px; }
+  .cols { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
+  .split { display: grid; gap: clamp(20px, 4vw, 44px); grid-template-columns: minmax(280px, 420px) 1fr; align-items: start; }
+  @media (max-width: 960px) { .split { grid-template-columns: 1fr; } }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .stack { display: flex; flex-direction: column; gap: 14px; }
+  .fld { display: block; margin-bottom: 12px; }
+  .fld > span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  input[type="number"], input[type="text"], input[type="password"], select, textarea {
+    width: 100%; padding: 10px 12px; border-radius: 9px; font: inherit; font-size: 14px;
+    background: var(--cell); border: 1px solid var(--line); color: var(--ink);
+  }
+  textarea { resize: vertical; min-height: 120px; line-height: 1.5; }
+  input[type="range"] { width: 100%; accent-color: #e8e8e8; }
+  input[type="checkbox"] { accent-color: #e8e8e8; width: 16px; height: 16px; }
+  .check { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); cursor: pointer; }
+  .btn {
+    padding: 11px 18px; border-radius: 10px; font-size: 14px; font-weight: 500;
+    background: var(--ink); color: var(--ink-on-light); transition: background .2s, transform .1s;
+  }
+  .btn:hover:not(:disabled) { background: #fff; }
+  .btn:active:not(:disabled) { transform: scale(.985); }
+  .btn:disabled { background: #2c2c2c; color: #6f6f6f; cursor: not-allowed; }
+  .btn.wide { width: 100%; }
+  .btn.big { padding: 16px 24px; font-size: 16px; }
+  .out { font-size: 14px; color: var(--muted); line-height: 1.55; min-height: 20px; }
+  .out b { color: var(--ink); font-weight: 500; }
+  .num { font-variant-numeric: tabular-nums; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .stat small { display: block; font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+  .stat b { font-size: 20px; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+  /* ---------- bet control ---------- */
+  .bet-box { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .bet-box input { width: 130px; }
+  .bet-box .ghost { padding: 8px 11px; font-size: 12px; }
+
+  /* ---------- roulette ---------- */
+  .stage { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+  .wheel-wrap { width: 100%; max-width: 420px; filter: drop-shadow(0 18px 26px rgba(0,0,0,.7)); }
   .wheel-wrap svg { display: block; width: 100%; height: auto; }
   .pk.hit { stroke: var(--mark); stroke-width: 3; }
 
   .plate {
-    position: relative; width: 100%; max-width: 460px;
+    position: relative; width: 100%; max-width: 440px;
     display: flex; align-items: center; gap: 16px;
     padding: 14px 18px; border-radius: 12px;
     background: var(--panel); border: 1px solid var(--line);
   }
   .res-num {
-    flex: none; width: 56px; height: 56px; border-radius: 50%;
-    display: grid; place-items: center; font-size: 24px; font-weight: 500;
+    flex: none; width: 54px; height: 54px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 23px; font-weight: 500;
     background: transparent; color: var(--ink); border: 1px solid var(--mark);
     transition: background .3s, color .3s;
   }
@@ -88,17 +145,16 @@
   .res-num.green { background: var(--mid); color: #fff; border-color: var(--mid); }
   .res-num.pop { animation: pop .5s cubic-bezier(.2, 1.5, .4, 1); }
   @keyframes pop { from { transform: scale(.5); } to { transform: scale(1); } }
-  .res-text strong { display: block; font-weight: 500; font-size: 18px; letter-spacing: -.01em; }
+  .res-text strong { display: block; font-weight: 500; font-size: 17px; letter-spacing: -.01em; }
   .res-text span { font-size: 14px; color: var(--muted); font-weight: 300; }
   .res-text span.plus { color: var(--ink); font-weight: 500; }
-  .res-text span.minus { color: var(--muted); }
   .float {
-    position: absolute; right: 20px; top: -4px; font-weight: 500; font-size: 24px; color: var(--ink);
+    position: absolute; right: 20px; top: -4px; font-weight: 500; font-size: 23px; color: var(--ink);
     pointer-events: none; animation: floatUp 1.8s ease-out forwards;
   }
   @keyframes floatUp { from { opacity: 1; transform: translateY(0);} to { opacity: 0; transform: translateY(-40px);} }
 
-  .history { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; min-height: 28px; max-width: 460px; }
+  .history { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; min-height: 28px; max-width: 440px; }
   .dot {
     width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
     font-size: 12px; font-weight: 500; border: 1px solid var(--mark);
@@ -108,25 +164,18 @@
   .dot.green { background: var(--mid); color: #fff; border-color: var(--mid); }
   .dot:first-child { outline: 1px solid var(--ink); outline-offset: 3px; }
 
-  /* ---------- table ---------- */
-  .table { display: flex; flex-direction: column; gap: 22px; }
-  .board {
-    display: flex; flex-direction: column; gap: 10px;
-    padding: 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line);
-  }
-  .grp {
-    display: grid; gap: 1px; padding: 1px; border-radius: 8px; overflow: hidden;
-    background: #3a3a3a;
-  }
+  .table { display: flex; flex-direction: column; gap: 20px; }
+  .board { display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+  .grp { display: grid; gap: 1px; padding: 1px; border-radius: 8px; overflow: hidden; background: #3a3a3a; }
   .zero-row { grid-template-columns: 1fr; }
-  .numbers { grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(3, minmax(54px, 1fr)); }
+  .numbers { grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(3, minmax(50px, 1fr)); }
   .numbers .cell { grid-row: var(--r); grid-column: var(--c); }
   .dozens { grid-template-columns: repeat(3, 1fr); }
   .outside { grid-template-columns: repeat(6, 1fr); }
 
   .cell {
     position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 48px; padding: 4px; font-weight: 500; font-size: 17px;
+    min-height: 46px; padding: 4px; font-weight: 500; font-size: 16px;
     background-color: var(--cell); color: var(--ink);
     transition: transform .15s, background-color .2s;
   }
@@ -135,11 +184,10 @@
   .cell.green { background-color: var(--mid); color: #fff; }
   .cell .lbl { font-size: 14px; }
   .cell small { font-size: 11px; font-weight: 300; opacity: .6; }
-  .cell.zero { min-height: 44px; letter-spacing: .1em; }
+  .cell.zero { min-height: 42px; letter-spacing: .1em; }
   .cell:hover { background-image: linear-gradient(rgba(160,160,160,.2), rgba(160,160,160,.2)); }
   .cell:active { transform: scale(.96); }
   body.spinning .cell { pointer-events: none; }
-
   .cell.win { outline: 3px solid var(--mark); outline-offset: -3px; animation: pulse 1s ease-in-out 3; z-index: 1; }
   .cell.hit { outline: 3px solid var(--mark); outline-offset: -3px; z-index: 2; }
   @keyframes pulse { 50% { outline-color: transparent; } }
@@ -155,12 +203,11 @@
   .stake[hidden] { display: none; }
   @keyframes drop { from { transform: translate(-50%, -230%) scale(1.25); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
 
-  /* ---------- controls ---------- */
-  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
   .chips { display: flex; gap: 10px; align-items: center; }
   .chips-label { font-size: 14px; color: var(--muted); margin-right: 4px; }
   .chip {
-    width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center;
+    width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center;
     font-weight: 500; font-size: 14px; color: var(--ink);
     border: 1.5px solid var(--mark); background: transparent;
     transition: transform .2s cubic-bezier(.3,1.6,.5,1), background .2s, color .2s, border-color .2s;
@@ -168,482 +215,2360 @@
   .chip:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--ink); }
   .chip[aria-pressed="true"] { background: var(--ink); color: var(--ink-on-light); border-color: var(--ink); transform: translateY(-4px); }
   .chip:disabled { opacity: .45; cursor: not-allowed; }
-
-  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
   .total { margin-left: auto; text-align: right; font-size: 13px; color: var(--muted); }
-  .total strong { display: block; font-size: 22px; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
-
+  .total strong { display: block; font-size: 21px; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
   .spin {
-    width: 100%; padding: 17px 24px; border-radius: 12px;
-    font-size: 17px; font-weight: 500; letter-spacing: .01em; color: var(--ink-on-light);
-    background: var(--ink); transition: background .2s, transform .1s;
+    width: 100%; padding: 16px 24px; border-radius: 12px;
+    font-size: 17px; font-weight: 500; color: var(--ink-on-light); background: var(--ink);
+    transition: background .2s, transform .1s;
   }
-  .spin:hover:not(:disabled) { background: #ffffff; }
-  .spin:active:not(:disabled) { transform: scale(.99); }
+  .spin:hover:not(:disabled) { background: #fff; }
   .spin:disabled { background: #2c2c2c; color: #6f6f6f; cursor: not-allowed; }
 
-  .notice { margin-top: 34px; text-align: center; font-size: 13px; color: var(--muted); font-weight: 300; }
+  /* ---------- slots ---------- */
+  .reels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+  .reel {
+    height: 120px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line);
+    display: grid; place-items: center; font-size: 54px; line-height: 1; overflow: hidden;
+  }
+  .reel.spin-blur { filter: blur(1.5px); opacity: .85; }
+  .reel.hit { border-color: var(--light); background: #232323; }
+  .paytable { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .paytable td { padding: 6px 4px; border-bottom: 1px solid var(--line); color: var(--muted); }
+  .paytable td:first-child { font-size: 18px; color: var(--ink); }
+  .paytable td:last-child { text-align: right; color: var(--ink); }
+
+  /* ---------- mines ---------- */
+  .mines-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .tile {
+    aspect-ratio: 1; border-radius: 10px; background: var(--cell); border: 1px solid var(--line);
+    display: grid; place-items: center; font-size: 24px; transition: transform .12s, background .2s;
+  }
+  .tile:hover:not(:disabled) { background: #282828; }
+  .tile:active:not(:disabled) { transform: scale(.95); }
+  .tile:disabled { cursor: default; }
+  .tile.gem { background: var(--light); color: var(--ink-on-light); border-color: var(--light); animation: pop .3s; }
+  .tile.bomb { background: var(--mid); border-color: var(--mid); animation: pop .3s; }
+  .tile.shown { opacity: .5; }
+
+  /* ---------- crash ---------- */
+  .crash-stage { position: relative; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); padding: 14px; }
+  .crash-stage canvas { display: block; width: 100%; height: 240px; }
+  .crash-val {
+    position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none;
+    font-size: clamp(34px, 7vw, 56px); font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -.02em;
+  }
+  .crash-val.dead { color: var(--mid); }
+  .tape { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tape span { font-size: 12px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--line); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .tape span.hi { color: var(--ink-on-light); background: var(--light); border-color: var(--light); }
+
+  /* ---------- dice ---------- */
+  .dice-val { font-size: clamp(40px, 9vw, 72px); font-weight: 500; text-align: center; font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
+  .dice-val.win { color: #fff; }
+  .dice-val.lose { color: var(--mid); }
+  .dice-bar { height: 10px; border-radius: 5px; background: var(--cell); position: relative; overflow: hidden; margin: 14px 0 6px; }
+  .dice-bar i { position: absolute; inset: 0 auto 0 0; background: var(--mid); }
+  .dice-bar u { position: absolute; top: -4px; width: 2px; height: 18px; background: var(--light); }
+
+  /* ---------- blackjack ---------- */
+  .bj-hand { display: flex; gap: 8px; min-height: 96px; flex-wrap: wrap; align-items: center; }
+  .pcard {
+    width: 62px; height: 90px; border-radius: 8px; background: var(--light); color: var(--ink-on-light);
+    display: flex; flex-direction: column; justify-content: space-between; padding: 7px 8px; font-weight: 500;
+    box-shadow: 0 6px 14px rgba(0,0,0,.5); animation: deal .3s cubic-bezier(.2,1.4,.4,1);
+  }
+  .pcard.soft { color: #6b6b6b; }
+  .pcard.back { background: #242424; color: transparent; border: 1px solid var(--mark);
+    background-image: repeating-linear-gradient(45deg, #2b2b2b 0 6px, #202020 6px 12px); }
+  .pcard span:last-child { align-self: flex-end; transform: rotate(180deg); }
+  @keyframes deal { from { opacity: 0; transform: translateY(-16px) scale(.9); } to { opacity: 1; } }
+  .bj-row { margin-bottom: 16px; }
+  .bj-row > small { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+
+  /* ---------- photo ---------- */
+  .drop {
+    border: 1px dashed var(--mark); border-radius: 14px; padding: 34px 20px; text-align: center;
+    color: var(--muted); font-size: 14px; transition: background .2s, border-color .2s;
+  }
+  .drop.over { border-color: var(--light); background: #1d1d1d; color: var(--ink); }
+  .photo-stage {
+    position: relative; display: inline-block; max-width: 100%; line-height: 0;
+    background-image: repeating-conic-gradient(#1c1c1c 0 25%, #242424 0 50%); background-size: 22px 22px;
+    border-radius: 10px; overflow: hidden;
+  }
+  .photo-stage canvas { max-width: 100%; height: auto; display: block; }
+  .crop-box { position: absolute; border: 1px solid var(--light); box-shadow: 0 0 0 9999px rgba(0,0,0,.55); cursor: move; }
+  .crop-box i { position: absolute; width: 14px; height: 14px; background: var(--light); border-radius: 3px; }
+  .crop-box i.br { right: -7px; bottom: -7px; cursor: nwse-resize; }
+  .crop-box i.tl { left: -7px; top: -7px; cursor: nwse-resize; }
+  .photo-wrap { display: flex; justify-content: center; padding: 10px 0 16px; }
+  .slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; font-size: 13px; color: var(--muted); }
+  .slider-row span:first-child { width: 96px; flex: none; }
+  .slider-row output { width: 44px; text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .chipset { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chipset button { padding: 7px 12px; font-size: 13px; border-radius: 8px; border: 1px solid var(--line); color: var(--muted); }
+  .chipset button:hover { color: var(--ink); border-color: var(--mark); }
+  .chipset button[aria-pressed="true"] { background: var(--light); color: var(--ink-on-light); border-color: var(--light); }
+
+  /* ---------- tests ---------- */
+  .arena {
+    position: relative; border-radius: 14px; border: 1px solid var(--line); background: var(--panel);
+    min-height: 280px; display: grid; place-items: center; text-align: center; padding: 20px; cursor: pointer;
+    user-select: none; overflow: hidden;
+  }
+  .arena.wait { background: #242424; }
+  .arena.go { background: var(--light); color: var(--ink-on-light); }
+  .arena.early { background: var(--mid); color: #fff; }
+  .arena b { font-size: clamp(26px, 5vw, 40px); font-weight: 500; display: block; }
+  .arena small { font-size: 14px; opacity: .75; display: block; margin-top: 8px; }
+  .target { position: absolute; border-radius: 50%; background: var(--light); border: 3px solid #fff; cursor: crosshair; animation: pop .16s; }
+  .type-text { font-size: 18px; line-height: 1.75; letter-spacing: .01em; word-break: break-word; }
+  .type-text span.ok { color: var(--ink); }
+  .type-text span.bad { color: var(--ink-on-light); background: var(--mid); border-radius: 3px; }
+  .type-text span.rest { color: #5c5c5c; }
+  .type-text span.cur { border-bottom: 2px solid var(--light); }
+  .seq { font-size: clamp(30px, 7vw, 48px); font-weight: 500; letter-spacing: .18em; font-variant-numeric: tabular-nums; }
+
+  /* ---------- tools ---------- */
+  .copybox { display: flex; gap: 8px; align-items: center; }
+  .copybox input { font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: .02em; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: 8px; }
+  .swatch { height: 56px; border-radius: 9px; border: 1px solid var(--line); font-size: 11px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; cursor: pointer; }
+  .big-time { font-size: clamp(38px, 9vw, 64px); font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -.02em; text-align: center; }
+  .laps { max-height: 180px; overflow: auto; font-size: 13px; color: var(--muted); }
+  .laps div { display: flex; justify-content: space-between; padding: 6px 2px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+
+  .notice { margin-top: 36px; text-align: center; font-size: 13px; color: var(--muted); font-weight: 300; }
 
   /* ---------- responsive ---------- */
-  @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } }
   @media (max-width: 700px) {
-    .numbers { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(12, 44px); }
+    .numbers { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(12, 42px); }
     .numbers .cell { grid-row: var(--vr); grid-column: var(--vc); }
     .outside { grid-template-columns: repeat(3, 1fr); }
     .top { flex-wrap: wrap; }
     .total { margin-left: 0; text-align: left; }
-    .chip { width: 46px; height: 46px; }
+    .chip { width: 44px; height: 44px; }
+    .reel { height: 92px; font-size: 40px; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01s !important; animation-iteration-count: 1 !important; transition-duration: .01s !important; }
   }
 </style>
 </head>
-
 <body>
 <div class="shell">
   <header class="top">
     <div class="brand">
-      <h1>Lucky Casino</h1>
-      <p>Европейская рулетка · демо</p>
+      <h1>Lucky Hub</h1>
+      <p>Казино, фоторедактор и мини-инструменты в одном файле</p>
     </div>
     <div class="wallet">
       <div class="balance" id="balanceBox">
         <small>Баланс</small>
         <strong id="balance">5 000</strong>
       </div>
-      <button class="ghost" id="resetBtn" title="Вернуть 5 000 демо-монет">Сбросить</button>
+      <button class="ghost" id="resetBank" title="Вернуть 5 000 демо-монет">Сбросить</button>
     </div>
   </header>
 
-  <div class="layout">
-    <section class="stage" aria-label="Колесо рулетки">
-      <div class="wheel-wrap" id="wheelWrap"></div>
+  <nav class="nav" role="tablist" aria-label="Разделы">
+    <button role="tab" data-view="casino" aria-selected="true">Казино</button>
+    <button role="tab" data-view="photo" aria-selected="false">Фото</button>
+    <button role="tab" data-view="tests" aria-selected="false">Тесты</button>
+    <button role="tab" data-view="tools" aria-selected="false">Инструменты</button>
+  </nav>
 
-      <div class="plate" aria-live="polite">
-        <div class="res-num" id="resNum">–</div>
-        <div class="res-text">
-          <strong id="resTitle">Делайте ставки</strong>
-          <span id="resSub">Поставь фишки на стол и нажми «Крутить».</span>
+  <!-- ======================= КАЗИНО ======================= -->
+  <section class="view on" id="view-casino">
+    <div class="subnav" role="tablist" aria-label="Игры">
+      <button role="tab" data-page="roulette" aria-selected="true">Рулетка</button>
+      <button role="tab" data-page="slots" aria-selected="false">Слоты</button>
+      <button role="tab" data-page="mines" aria-selected="false">Мины</button>
+      <button role="tab" data-page="crash" aria-selected="false">Краш</button>
+      <button role="tab" data-page="dice" aria-selected="false">Кости</button>
+      <button role="tab" data-page="bj" aria-selected="false">Блэкджек</button>
+    </div>
+
+    <!-- рулетка -->
+    <div class="page on" id="page-roulette">
+      <div class="split">
+        <section class="stage" aria-label="Колесо рулетки">
+          <div class="wheel-wrap" id="wheelWrap"></div>
+          <div class="plate" aria-live="polite">
+            <div class="res-num" id="resNum">–</div>
+            <div class="res-text">
+              <strong id="resTitle">Делайте ставки</strong>
+              <span id="resSub">Поставь фишки на стол и нажми «Крутить».</span>
+            </div>
+          </div>
+          <div class="history" id="history" aria-label="Последние номера"></div>
+        </section>
+
+        <section class="table" aria-label="Игровой стол">
+          <div class="board" id="board">
+            <div class="grp zero-row" id="zeroRow"></div>
+            <div class="grp numbers" id="numbers"></div>
+            <div class="grp dozens" id="dozens"></div>
+            <div class="grp outside" id="outside"></div>
+          </div>
+          <div class="controls">
+            <div class="chips" role="group" aria-label="Номинал фишки">
+              <span class="chips-label">Фишка</span>
+              <button class="chip" data-v="10" aria-pressed="false">10</button>
+              <button class="chip" data-v="50" aria-pressed="true">50</button>
+              <button class="chip" data-v="100" aria-pressed="false">100</button>
+              <button class="chip" data-v="500" aria-pressed="false">500</button>
+            </div>
+            <div class="total">На столе<strong id="total">0</strong></div>
+          </div>
+          <div class="row">
+            <button class="ghost" id="undoBtn">Отменить</button>
+            <button class="ghost" id="clearBtn">Очистить стол</button>
+            <button class="ghost" id="repeatBtn">Повторить</button>
+            <button class="ghost" id="doubleBtn">Удвоить</button>
+          </div>
+          <button class="spin" id="spinBtn">Крутить</button>
+        </section>
+      </div>
+    </div>
+
+    <!-- слоты -->
+    <div class="page" id="page-slots">
+      <div class="split">
+        <div class="card">
+          <h3>Слоты 3×1</h3>
+          <p class="hint">Три одинаковых символа — выплата по таблице. Два одинаковых возвращают ставку.</p>
+          <div class="reels" id="reels">
+            <div class="reel">🍒</div><div class="reel">🍋</div><div class="reel">🔔</div>
+          </div>
+          <div class="bet-box" data-scope="slots">
+            <input type="number" data-bet min="10" step="10" value="50" aria-label="Ставка" />
+            <button class="ghost" data-betact="half">½</button>
+            <button class="ghost" data-betact="double">×2</button>
+            <button class="ghost" data-betact="max">Макс</button>
+          </div>
+          <br />
+          <button class="btn wide big" id="slotSpin">Крутить</button>
+          <p class="out" id="slotOut" style="margin-top:14px">Ставь и крути.</p>
+        </div>
+        <div class="card">
+          <h3>Выплаты</h3>
+          <p class="hint">Множитель ставки за три одинаковых символа.</p>
+          <table class="paytable" id="payTable"></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- мины -->
+    <div class="page" id="page-mines">
+      <div class="split">
+        <div class="card">
+          <h3>Мины</h3>
+          <p class="hint">Открывай ячейки и забирай выигрыш до того, как попадёшь на мину.</p>
+          <label class="fld"><span>Количество мин</span>
+            <select id="mineCount">
+              <option value="3">3 мины — спокойно</option>
+              <option value="5" selected>5 мин — баланс</option>
+              <option value="10">10 мин — жёстко</option>
+              <option value="24">24 мины — одна ячейка</option>
+            </select>
+          </label>
+          <div class="bet-box" data-scope="mines">
+            <input type="number" data-bet min="10" step="10" value="100" aria-label="Ставка" />
+            <button class="ghost" data-betact="half">½</button>
+            <button class="ghost" data-betact="double">×2</button>
+            <button class="ghost" data-betact="max">Макс</button>
+          </div>
+          <br />
+          <button class="btn wide" id="mineStart">Начать раунд</button>
+          <br /><br />
+          <button class="btn wide" id="mineCash" disabled>Забрать</button>
+          <div class="stats" style="margin-top:16px">
+            <div class="stat"><small>Множитель</small><b id="mineMult">1.00×</b></div>
+            <div class="stat"><small>К выплате</small><b id="minePay">0</b></div>
+            <div class="stat"><small>Открыто</small><b id="mineOpen">0</b></div>
+          </div>
+          <p class="out" id="mineOut" style="margin-top:14px">Выбери ставку и начни раунд.</p>
+        </div>
+        <div class="card">
+          <h3>Поле 5×5</h3>
+          <p class="hint">Каждая открытая ячейка повышает множитель.</p>
+          <div class="mines-grid" id="mineGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- краш -->
+    <div class="page" id="page-crash">
+      <div class="split">
+        <div class="card">
+          <h3>Краш</h3>
+          <p class="hint">Множитель растёт. Успей забрать до обвала.</p>
+          <div class="bet-box" data-scope="crash">
+            <input type="number" data-bet min="10" step="10" value="100" aria-label="Ставка" />
+            <button class="ghost" data-betact="half">½</button>
+            <button class="ghost" data-betact="double">×2</button>
+            <button class="ghost" data-betact="max">Макс</button>
+          </div>
+          <label class="fld" style="margin-top:12px"><span>Автозабор на множителе (0 — выключено)</span>
+            <input type="number" id="crashAuto" min="0" step="0.1" value="2" />
+          </label>
+          <button class="btn wide big" id="crashBtn">Запустить</button>
+          <div class="stats" style="margin-top:16px">
+            <div class="stat"><small>Ставка в игре</small><b id="crashStake">0</b></div>
+            <div class="stat"><small>Сейчас стоит</small><b id="crashNow">0</b></div>
+          </div>
+          <p class="out" id="crashOut" style="margin-top:14px">Ставь и запускай раунд.</p>
+        </div>
+        <div class="card">
+          <h3>График раунда</h3>
+          <p class="hint">Последние результаты — ниже.</p>
+          <div class="crash-stage">
+            <canvas id="crashCv" width="700" height="240"></canvas>
+            <div class="crash-val" id="crashVal">1.00×</div>
+          </div>
+          <br />
+          <div class="tape" id="crashTape"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- кости -->
+    <div class="page" id="page-dice">
+      <div class="split">
+        <div class="card">
+          <h3>Кости</h3>
+          <p class="hint">Бросок от 0.00 до 100.00. Двигай порог — меняется шанс и выплата.</p>
+          <div class="bet-box" data-scope="dice">
+            <input type="number" data-bet min="10" step="10" value="100" aria-label="Ставка" />
+            <button class="ghost" data-betact="half">½</button>
+            <button class="ghost" data-betact="double">×2</button>
+            <button class="ghost" data-betact="max">Макс</button>
+          </div>
+          <div class="chipset" style="margin:14px 0">
+            <button data-dicemode="under" aria-pressed="true">Меньше порога</button>
+            <button data-dicemode="over" aria-pressed="false">Больше порога</button>
+          </div>
+          <label class="fld"><span>Порог: <b id="diceTargetVal" class="num">50.00</b></span>
+            <input type="range" id="diceTarget" min="2" max="98" step="1" value="50" />
+          </label>
+          <div class="stats">
+            <div class="stat"><small>Шанс</small><b id="diceChance">50%</b></div>
+            <div class="stat"><small>Выплата</small><b id="dicePay">1.98×</b></div>
+          </div>
+          <br />
+          <button class="btn wide big" id="diceRoll">Бросок</button>
+        </div>
+        <div class="card">
+          <h3>Результат</h3>
+          <p class="hint">Белая метка — порог, серая зона — выигрышный диапазон.</p>
+          <div class="dice-val" id="diceVal">–</div>
+          <div class="dice-bar"><i id="diceZone"></i><u id="diceMark"></u></div>
+          <div class="row" style="justify-content:space-between;font-size:12px;color:var(--muted)"><span>0</span><span>100</span></div>
+          <p class="out" id="diceOut" style="margin-top:14px">Выбери порог и бросай.</p>
+          <div class="tape" id="diceTape" style="margin-top:14px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- блэкджек -->
+    <div class="page" id="page-bj">
+      <div class="split">
+        <div class="card">
+          <h3>Блэкджек</h3>
+          <p class="hint">Дилер добирает до 17. Блэкджек платит 3:2.</p>
+          <div class="bet-box" data-scope="bj">
+            <input type="number" data-bet min="10" step="10" value="100" aria-label="Ставка" />
+            <button class="ghost" data-betact="half">½</button>
+            <button class="ghost" data-betact="double">×2</button>
+            <button class="ghost" data-betact="max">Макс</button>
+          </div>
+          <br />
+          <button class="btn wide" id="bjDeal">Раздать</button>
+          <div class="row" style="margin-top:10px">
+            <button class="ghost" id="bjHit" disabled>Ещё</button>
+            <button class="ghost" id="bjStand" disabled>Хватит</button>
+            <button class="ghost" id="bjDouble" disabled>Удвоить</button>
+          </div>
+          <p class="out" id="bjOut" style="margin-top:14px">Сделай ставку и раздавай.</p>
+        </div>
+        <div class="card">
+          <h3>Стол</h3>
+          <p class="hint">Верх — дилер, низ — ты.</p>
+          <div class="bj-row"><small>Дилер: <b id="bjDealerVal">–</b></small><div class="bj-hand" id="bjDealer"></div></div>
+          <div class="bj-row"><small>Игрок: <b id="bjPlayerVal">–</b></small><div class="bj-hand" id="bjPlayer"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ФОТО ======================= -->
+  <section class="view" id="view-photo">
+    <div class="subnav" role="tablist" aria-label="Фото">
+      <button role="tab" data-page="editor" aria-selected="true">Редактор</button>
+      <button role="tab" data-page="convert" aria-selected="false">Формат и вес</button>
+    </div>
+
+    <div class="page on" id="page-editor">
+      <div class="card" id="dropCard">
+        <div class="drop" id="drop">
+          Перетащи фото сюда или <button class="ghost" id="pickBtn" style="margin-left:4px">выбери файл</button>
+          <input type="file" id="file" accept="image/*" hidden />
+          <div style="margin-top:8px;font-size:12px">Всё считается прямо в браузере — файл никуда не уходит.</div>
         </div>
       </div>
 
-      <div class="history" id="history" aria-label="Последние номера"></div>
-    </section>
+      <div id="editorUI" hidden>
+        <div class="split" style="margin-top:18px">
+          <div class="stack">
+            <div class="card">
+              <h3>Размер</h3>
+              <p class="hint" id="sizeInfo">—</p>
+              <div class="row">
+                <label class="fld" style="flex:1;min-width:110px"><span>Ширина, px</span><input type="number" id="pw" min="1" /></label>
+                <label class="fld" style="flex:1;min-width:110px"><span>Высота, px</span><input type="number" id="ph" min="1" /></label>
+              </div>
+              <label class="check" style="margin-bottom:12px"><input type="checkbox" id="lockRatio" checked /> Сохранять пропорции</label>
+              <div class="chipset" style="margin-bottom:12px">
+                <button data-scale="0.25">25%</button>
+                <button data-scale="0.5">50%</button>
+                <button data-scale="0.75">75%</button>
+                <button data-scale="2">200%</button>
+                <button data-fit="1920">В 1920</button>
+                <button data-fit="1080">В 1080</button>
+                <button data-fit="512">В 512</button>
+              </div>
+              <button class="btn wide" id="applySize">Изменить разрешение</button>
+            </div>
 
-    <section class="table" aria-label="Игровой стол">
-      <div class="board" id="board">
-        <div class="grp zero-row" id="zeroRow"></div>
-        <div class="grp numbers" id="numbers"></div>
-        <div class="grp dozens" id="dozens"></div>
-        <div class="grp outside" id="outside"></div>
-      </div>
+            <div class="card">
+              <h3>Обрезка</h3>
+              <p class="hint">Выдели область мышкой или возьми готовое соотношение.</p>
+              <div class="row" style="margin-bottom:12px">
+                <button class="btn" id="cropMode">Выделить область</button>
+                <button class="ghost" id="cropApply" disabled>Обрезать</button>
+                <button class="ghost" id="cropCancel" disabled>Отмена</button>
+              </div>
+              <div class="chipset">
+                <button data-ratio="1">1:1</button>
+                <button data-ratio="1.3333">4:3</button>
+                <button data-ratio="0.75">3:4</button>
+                <button data-ratio="1.7778">16:9</button>
+                <button data-ratio="0.5625">9:16</button>
+              </div>
+            </div>
 
-      <div class="controls">
-        <div class="chips" role="group" aria-label="Номинал фишки">
-          <span class="chips-label">Фишка</span>
-          <button class="chip" data-v="10" aria-pressed="false">10</button>
-          <button class="chip" data-v="50" aria-pressed="true">50</button>
-          <button class="chip" data-v="100" aria-pressed="false">100</button>
-          <button class="chip" data-v="500" aria-pressed="false">500</button>
+            <div class="card">
+              <h3>Поворот и отражение</h3>
+              <p class="hint">Меняет само изображение, а не только вид.</p>
+              <div class="row">
+                <button class="ghost" data-rot="-90">↺ 90°</button>
+                <button class="ghost" data-rot="90">↻ 90°</button>
+                <button class="ghost" data-rot="180">180°</button>
+                <button class="ghost" data-flip="h">Отразить по горизонтали</button>
+                <button class="ghost" data-flip="v">По вертикали</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack">
+            <div class="card">
+              <h3>Предпросмотр</h3>
+              <p class="hint" id="cropInfo">Изменения применяются к картинке сразу.</p>
+              <div class="photo-wrap">
+                <div class="photo-stage" id="stage"></div>
+              </div>
+              <div class="row">
+                <button class="ghost" id="undoPhoto">Шаг назад</button>
+                <button class="ghost" id="resetPhoto">Вернуть оригинал</button>
+                <button class="ghost" id="newPhoto">Другое фото</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>Цвет и фильтры</h3>
+              <p class="hint">Двигай ползунки, потом «Применить», чтобы вшить их в картинку.</p>
+              <div class="slider-row"><span>Яркость</span><input type="range" data-f="brightness" min="0" max="200" value="100" /><output>100</output></div>
+              <div class="slider-row"><span>Контраст</span><input type="range" data-f="contrast" min="0" max="200" value="100" /><output>100</output></div>
+              <div class="slider-row"><span>Насыщенность</span><input type="range" data-f="saturate" min="0" max="300" value="100" /><output>100</output></div>
+              <div class="slider-row"><span>Ч/б</span><input type="range" data-f="grayscale" min="0" max="100" value="0" /><output>0</output></div>
+              <div class="slider-row"><span>Сепия</span><input type="range" data-f="sepia" min="0" max="100" value="0" /><output>0</output></div>
+              <div class="slider-row"><span>Размытие</span><input type="range" data-f="blur" min="0" max="20" value="0" /><output>0</output></div>
+              <div class="slider-row"><span>Инверсия</span><input type="range" data-f="invert" min="0" max="100" value="0" /><output>0</output></div>
+              <div class="slider-row"><span>Оттенок</span><input type="range" data-f="hue-rotate" min="0" max="360" value="0" /><output>0</output></div>
+              <div class="row" style="margin-top:8px">
+                <button class="btn" id="applyFilters">Применить фильтры</button>
+                <button class="ghost" id="resetFilters">Сбросить ползунки</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="total">На столе<strong id="total">0</strong></div>
       </div>
+    </div>
 
-      <div class="actions">
-        <button class="ghost" id="undoBtn">Отменить</button>
-        <button class="ghost" id="clearBtn">Очистить стол</button>
-        <button class="ghost" id="repeatBtn">Повторить</button>
-        <button class="ghost" id="doubleBtn">Удвоить</button>
+    <div class="page" id="page-convert">
+      <div class="card">
+        <h3>Формат и вес</h3>
+        <p class="hint" id="convHint">Сначала загрузи фото во вкладке «Редактор».</p>
+        <div class="row">
+          <label class="fld" style="flex:1;min-width:180px"><span>Формат файла</span>
+            <select id="fmt">
+              <option value="image/png">PNG — без потерь</option>
+              <option value="image/jpeg" selected>JPEG — маленький вес</option>
+              <option value="image/webp">WEBP — лучший компромисс</option>
+            </select>
+          </label>
+          <label class="fld" style="flex:1;min-width:180px"><span>Имя файла</span>
+            <input type="text" id="fname" value="photo" />
+          </label>
+        </div>
+        <div class="slider-row"><span>Качество</span><input type="range" id="quality" min="10" max="100" value="90" /><output>90</output></div>
+        <div class="stats" style="margin:14px 0">
+          <div class="stat"><small>Разрешение</small><b id="convSize">—</b></div>
+          <div class="stat"><small>Примерный вес</small><b id="convWeight">—</b></div>
+        </div>
+        <div class="row">
+          <button class="btn" id="estimate">Посчитать вес</button>
+          <button class="btn" id="download">Скачать</button>
+          <button class="ghost" id="copyImg">Копировать в буфер</button>
+        </div>
+        <p class="out" id="convOut" style="margin-top:12px"></p>
       </div>
+    </div>
+  </section>
 
-      <button class="spin" id="spinBtn">Крутить</button>
-    </section>
-  </div>
+  <!-- ======================= ТЕСТЫ ======================= -->
+  <section class="view" id="view-tests">
+    <div class="subnav" role="tablist" aria-label="Тесты">
+      <button role="tab" data-page="reaction" aria-selected="true">Реакция</button>
+      <button role="tab" data-page="cps" aria-selected="false">Тест КПС</button>
+      <button role="tab" data-page="aim" aria-selected="false">Точность мыши</button>
+      <button role="tab" data-page="typing" aria-selected="false">Скорость печати</button>
+      <button role="tab" data-page="memory" aria-selected="false">Память</button>
+    </div>
 
-  <p class="notice">Демо-игра: монеты виртуальные, реальных денег и платежей здесь нет.</p>
+    <div class="page on" id="page-reaction">
+      <div class="split">
+        <div class="card">
+          <h3>Тест реакции</h3>
+          <p class="hint">5 попыток. Жди, пока поле станет светлым, и сразу кликай.</p>
+          <div class="stats">
+            <div class="stat"><small>Последняя</small><b id="rcLast">—</b></div>
+            <div class="stat"><small>Средняя</small><b id="rcAvg">—</b></div>
+            <div class="stat"><small>Лучшая</small><b id="rcBest">—</b></div>
+            <div class="stat"><small>Попытка</small><b id="rcTry">0/5</b></div>
+          </div>
+          <br />
+          <button class="btn wide" id="rcReset">Сбросить серию</button>
+        </div>
+        <div class="arena" id="rcArena" tabindex="0" role="button" aria-label="Поле теста реакции">
+          <div><b>Нажми, чтобы начать</b><small>Поле станет светлым через 1–5 секунд</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-cps">
+      <div class="split">
+        <div class="card">
+          <h3>Тест КПС</h3>
+          <p class="hint">Кликов в секунду. Отсчёт стартует с первого клика.</p>
+          <label class="fld"><span>Длительность</span>
+            <select id="cpsDur">
+              <option value="1">1 секунда</option>
+              <option value="5" selected>5 секунд</option>
+              <option value="10">10 секунд</option>
+              <option value="30">30 секунд</option>
+            </select>
+          </label>
+          <div class="stats">
+            <div class="stat"><small>Кликов</small><b id="cpsHits">0</b></div>
+            <div class="stat"><small>КПС</small><b id="cpsRate">0.00</b></div>
+            <div class="stat"><small>Рекорд</small><b id="cpsBest">—</b></div>
+            <div class="stat"><small>Осталось</small><b id="cpsLeft">—</b></div>
+          </div>
+        </div>
+        <div class="arena" id="cpsArena" tabindex="0" role="button" aria-label="Поле теста КПС">
+          <div><b>Кликай сюда</b><small>Первый клик запускает таймер</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-aim">
+      <div class="split">
+        <div class="card">
+          <h3>Точность мыши</h3>
+          <p class="hint">30 секунд. Попадай по кругам, промахи считаются.</p>
+          <label class="fld"><span>Размер целей</span>
+            <select id="aimSize">
+              <option value="56">Крупные</option>
+              <option value="40" selected>Средние</option>
+              <option value="26">Мелкие</option>
+            </select>
+          </label>
+          <div class="stats">
+            <div class="stat"><small>Попаданий</small><b id="aimHit">0</b></div>
+            <div class="stat"><small>Промахов</small><b id="aimMiss">0</b></div>
+            <div class="stat"><small>Точность</small><b id="aimAcc">—</b></div>
+            <div class="stat"><small>Сред. отклик</small><b id="aimSpeed">—</b></div>
+          </div>
+          <br />
+          <button class="btn wide" id="aimStart">Начать</button>
+        </div>
+        <div class="arena" id="aimArena" style="cursor:crosshair"><div><b>Нажми «Начать»</b><small>Таймер — 30 секунд</small></div></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-typing">
+      <div class="card">
+        <h3>Скорость печати</h3>
+        <p class="hint">Печатай текст целиком. Ошибки подсвечиваются, счётчик стартует с первой буквы.</p>
+        <div class="type-text" id="typeText"></div>
+        <br />
+        <textarea id="typeInput" rows="3" placeholder="Печатай здесь…" spellcheck="false"></textarea>
+        <div class="stats" style="margin-top:14px">
+          <div class="stat"><small>Знаков/мин</small><b id="tpCpm">0</b></div>
+          <div class="stat"><small>Слов/мин</small><b id="tpWpm">0</b></div>
+          <div class="stat"><small>Точность</small><b id="tpAcc">100%</b></div>
+          <div class="stat"><small>Время</small><b id="tpTime">0.0 с</b></div>
+          <div class="stat"><small>Рекорд, зн/мин</small><b id="tpBest">—</b></div>
+        </div>
+        <br />
+        <button class="btn" id="tpNew">Новый текст</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-memory">
+      <div class="split">
+        <div class="card">
+          <h3>Память на числа</h3>
+          <p class="hint">Число показывается на секунду. Повтори его — и длина вырастет.</p>
+          <div class="stats">
+            <div class="stat"><small>Уровень</small><b id="memLevel">1</b></div>
+            <div class="stat"><small>Знаков</small><b id="memLen">3</b></div>
+            <div class="stat"><small>Рекорд</small><b id="memBest">—</b></div>
+          </div>
+          <br />
+          <button class="btn wide" id="memStart">Начать</button>
+        </div>
+        <div class="card">
+          <div class="seq" id="memSeq" style="min-height:64px">—</div>
+          <br />
+          <input type="text" id="memInput" inputmode="numeric" placeholder="Введи число и нажми Enter" disabled />
+          <p class="out" id="memOut" style="margin-top:12px">Нажми «Начать».</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ИНСТРУМЕНТЫ ======================= -->
+  <section class="view" id="view-tools">
+    <div class="subnav" role="tablist" aria-label="Инструменты">
+      <button role="tab" data-page="pass" aria-selected="true">Пароли</button>
+      <button role="tab" data-page="units" aria-selected="false">Конвертер</button>
+      <button role="tab" data-page="text" aria-selected="false">Текст</button>
+      <button role="tab" data-page="rnd" aria-selected="false">Рандом</button>
+      <button role="tab" data-page="color" aria-selected="false">Цвета</button>
+      <button role="tab" data-page="time" aria-selected="false">Таймер</button>
+    </div>
+
+    <div class="page on" id="page-pass">
+      <div class="split">
+        <div class="card">
+          <h3>Генератор паролей</h3>
+          <p class="hint">Всё генерируется через crypto.getRandomValues.</p>
+          <div class="slider-row"><span>Длина</span><input type="range" id="pwLen" min="4" max="64" value="16" /><output>16</output></div>
+          <label class="check"><input type="checkbox" id="pwUp" checked /> Заглавные A–Z</label>
+          <label class="check"><input type="checkbox" id="pwLow" checked /> Строчные a–z</label>
+          <label class="check"><input type="checkbox" id="pwNum" checked /> Цифры 0–9</label>
+          <label class="check"><input type="checkbox" id="pwSym" checked /> Символы !@#$%</label>
+          <label class="check"><input type="checkbox" id="pwNoSim" /> Убрать похожие (0O1lI)</label>
+          <br />
+          <button class="btn wide" id="pwGen">Сгенерировать</button>
+        </div>
+        <div class="card">
+          <h3>Результат</h3>
+          <p class="hint">Нажми «Копировать», чтобы забрать пароль.</p>
+          <div class="copybox">
+            <input type="text" id="pwOut" readonly />
+            <button class="ghost" id="pwCopy">Копировать</button>
+          </div>
+          <div class="stats" style="margin-top:14px">
+            <div class="stat"><small>Энтропия</small><b id="pwBits">—</b></div>
+            <div class="stat"><small>Стойкость</small><b id="pwStrength">—</b></div>
+          </div>
+          <label class="fld" style="margin-top:14px"><span>Сколько паролей сразу</span><input type="number" id="pwCount" min="1" max="50" value="5" /></label>
+          <button class="ghost" id="pwBatch">Список паролей</button>
+          <textarea id="pwList" rows="6" readonly style="margin-top:12px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-units">
+      <div class="card">
+        <h3>Конвертер величин</h3>
+        <p class="hint">Длина, вес, температура, данные, скорость и время.</p>
+        <label class="fld"><span>Категория</span><select id="uCat"></select></label>
+        <div class="row">
+          <label class="fld" style="flex:1;min-width:190px"><span>Из</span><select id="uFrom"></select></label>
+          <label class="fld" style="flex:1;min-width:190px"><span>В</span><select id="uTo"></select></label>
+        </div>
+        <label class="fld"><span>Значение</span><input type="number" id="uVal" value="1" step="any" /></label>
+        <div class="stat"><small>Результат</small><b id="uOut">—</b></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-text">
+      <div class="card">
+        <h3>Анализ текста</h3>
+        <p class="hint">Символы, слова, время чтения плюс быстрые преобразования.</p>
+        <textarea id="txt" rows="8" placeholder="Вставь или напиши текст…"></textarea>
+        <div class="stats" style="margin:14px 0">
+          <div class="stat"><small>Символов</small><b id="tChars">0</b></div>
+          <div class="stat"><small>Без пробелов</small><b id="tNoSp">0</b></div>
+          <div class="stat"><small>Слов</small><b id="tWords">0</b></div>
+          <div class="stat"><small>Строк</small><b id="tLines">0</b></div>
+          <div class="stat"><small>Предложений</small><b id="tSent">0</b></div>
+          <div class="stat"><small>Чтение</small><b id="tRead">0 с</b></div>
+        </div>
+        <div class="chipset">
+          <button data-tx="upper">ВЕРХНИЙ РЕГИСТР</button>
+          <button data-tx="lower">нижний регистр</button>
+          <button data-tx="title">Каждое Слово</button>
+          <button data-tx="sentence">Как в предложении</button>
+          <button data-tx="trim">Убрать лишние пробелы</button>
+          <button data-tx="nolines">Склеить строки</button>
+          <button data-tx="reverse">Перевернуть</button>
+          <button data-tx="sort">Сортировать строки</button>
+          <button data-tx="uniq">Убрать дубли строк</button>
+          <button data-tx="translit">Транслит</button>
+          <button data-tx="copy">Копировать</button>
+          <button data-tx="clear">Очистить</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-rnd">
+      <div class="cols">
+        <div class="card">
+          <h3>Случайное число</h3>
+          <p class="hint">Диапазон включительно.</p>
+          <div class="row">
+            <label class="fld" style="flex:1"><span>От</span><input type="number" id="rMin" value="1" /></label>
+            <label class="fld" style="flex:1"><span>До</span><input type="number" id="rMax" value="100" /></label>
+          </div>
+          <button class="btn wide" id="rNum">Сгенерировать</button>
+          <div class="big-time" id="rNumOut" style="margin-top:14px">—</div>
+        </div>
+        <div class="card">
+          <h3>Монетка и кубики</h3>
+          <p class="hint">Честный бросок, без ставок.</p>
+          <div class="row">
+            <button class="ghost" id="rCoin">Монетка</button>
+            <button class="ghost" data-dice="6">Кубик d6</button>
+            <button class="ghost" data-dice="20">Кубик d20</button>
+            <button class="ghost" data-dice="100">d100</button>
+          </div>
+          <div class="big-time" id="rCoinOut" style="margin-top:14px">—</div>
+        </div>
+        <div class="card">
+          <h3>Выбор из списка</h3>
+          <p class="hint">По одному варианту на строку.</p>
+          <textarea id="rList" rows="5" placeholder="Пицца&#10;Суши&#10;Шаурма"></textarea>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" id="rPick">Выбрать одного</button>
+            <button class="ghost" id="rShuffle">Перемешать</button>
+          </div>
+          <p class="out" id="rListOut" style="margin-top:12px"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-color">
+      <div class="split">
+        <div class="card">
+          <h3>Цвет</h3>
+          <p class="hint">Пипетка, коды и производные оттенки.</p>
+          <label class="fld"><span>Выбери цвет</span><input type="color" id="cPick" value="#6b6b6b" style="width:100%;height:56px;border-radius:10px;background:var(--cell);border:1px solid var(--line)" /></label>
+          <label class="fld"><span>HEX</span><input type="text" id="cHex" value="#6B6B6B" /></label>
+          <div class="stats">
+            <div class="stat"><small>RGB</small><b id="cRgb" style="font-size:15px">—</b></div>
+            <div class="stat"><small>HSL</small><b id="cHsl" style="font-size:15px">—</b></div>
+          </div>
+          <br />
+          <button class="btn wide" id="cRandom">Случайный цвет</button>
+        </div>
+        <div class="card">
+          <h3>Палитра</h3>
+          <p class="hint">Клик по плитке копирует HEX.</p>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:8px">Оттенки</p>
+          <div class="swatches" id="cShades"></div>
+          <p style="font-size:13px;color:var(--muted);margin:14px 0 8px">Гармонии</p>
+          <div class="swatches" id="cHarmony"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-time">
+      <div class="split">
+        <div class="card">
+          <h3>Секундомер</h3>
+          <p class="hint">С кругами и точностью до сотых.</p>
+          <div class="big-time" id="swTime">00:00.00</div>
+          <br />
+          <div class="row">
+            <button class="btn" id="swStart">Старт</button>
+            <button class="ghost" id="swLap" disabled>Круг</button>
+            <button class="ghost" id="swReset">Сброс</button>
+          </div>
+          <div class="laps" id="swLaps" style="margin-top:14px"></div>
+        </div>
+        <div class="card">
+          <h3>Таймер обратного отсчёта</h3>
+          <p class="hint">В конце коротко пикнет.</p>
+          <div class="big-time" id="tmTime">05:00</div>
+          <br />
+          <div class="row">
+            <label class="fld" style="flex:1;min-width:90px"><span>Минуты</span><input type="number" id="tmMin" min="0" max="180" value="5" /></label>
+            <label class="fld" style="flex:1;min-width:90px"><span>Секунды</span><input type="number" id="tmSec" min="0" max="59" value="0" /></label>
+          </div>
+          <div class="row">
+            <button class="btn" id="tmStart">Старт</button>
+            <button class="ghost" id="tmStop">Стоп</button>
+            <button class="ghost" id="tmReset">Сброс</button>
+          </div>
+          <div class="chipset" style="margin-top:12px">
+            <button data-tm="60">1 мин</button>
+            <button data-tm="300">5 мин</button>
+            <button data-tm="600">10 мин</button>
+            <button data-tm="1500">25 мин</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="notice"></p>
 </div>
 
 <script>
 (function () {
   "use strict";
 
-  /* ================= data ================= */
-  const ORDER = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
-  const REDS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
-  const colorOf = n => n === 0 ? "green" : REDS.has(n) ? "red" : "black";
-  const STEP = 360 / 37;
-  const angleOf = n => ORDER.indexOf(n) * STEP;
-
-  const OUTSIDE = [
-    { key: "low",   label: "1–18",    mult: 2, test: n => n >= 1 && n <= 18 },
-    { key: "even",  label: "Чёт",     mult: 2, test: n => n > 0 && n % 2 === 0 },
-    { key: "red",   label: "Красное", mult: 2, test: n => colorOf(n) === "red",   cls: "red" },
-    { key: "black", label: "Чёрное",  mult: 2, test: n => colorOf(n) === "black", cls: "black" },
-    { key: "odd",   label: "Нечёт",   mult: 2, test: n => n % 2 === 1 },
-    { key: "high",  label: "19–36",   mult: 2, test: n => n >= 19 }
-  ];
-  const DOZENS = [
-    { key: "d1", label: "1–12",  mult: 3, test: n => n >= 1  && n <= 12 },
-    { key: "d2", label: "13–24", mult: 3, test: n => n >= 13 && n <= 24 },
-    { key: "d3", label: "25–36", mult: 3, test: n => n >= 25 }
-  ];
-  function betInfo(key) {
-    if (key.startsWith("n:")) { const v = +key.slice(2); return { mult: 36, test: n => n === v }; }
-    return OUTSIDE.concat(DOZENS).find(b => b.key === key);
-  }
-
+  /* ============ helpers ============ */
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+  const fmt = v => Math.round(v).toLocaleString("ru-RU");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const $ = s => document.querySelector(s);
-  const fmt = v => v.toLocaleString("ru-RU");
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const rnd = n => Math.floor(Math.random() * n);
 
-  /* ================= wheel (SVG, grayscale) ================= */
-  const C = 200, POCKET_R = 135, TRACK_R = 173;
-  const polar = (r, a) => { const t = a * Math.PI / 180; return [C + r * Math.sin(t), C - r * Math.cos(t)]; };
-  const sector = (r1, r2, a1, a2) => {
-    const [x1,y1] = polar(r2,a1), [x2,y2] = polar(r2,a2), [x3,y3] = polar(r1,a2), [x4,y4] = polar(r1,a1);
-    return `M${x1} ${y1}A${r2} ${r2} 0 0 1 ${x2} ${y2}L${x3} ${y3}A${r1} ${r1} 0 0 0 ${x4} ${y4}Z`;
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem("hub." + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem("hub." + k, JSON.stringify(v)); } catch (e) {} }
   };
 
-  function buildWheel() {
-    const fills = { red: "#e8e8e8", black: "#0d0d0d", green: "#6b6b6b" };
-    const inks  = { red: "#111111", black: "#e8e8e8", green: "#ffffff" };
-    let pockets = "", labels = "";
-    ORDER.forEach((n, i) => {
-      const a = i * STEP, col = colorOf(n);
-      pockets += `<path class="pk" id="pk-${n}" d="${sector(112, 158, a - STEP/2, a + STEP/2)}" fill="${fills[col]}" stroke="#4a4a4a" stroke-width=".8"/>`;
-      labels += `<text x="${C}" y="${C - 146}" transform="rotate(${a} ${C} ${C})" text-anchor="middle" dominant-baseline="middle" font-family="Onest, sans-serif" font-size="11.5" font-weight="500" fill="${inks[col]}">${n}</text>`;
-    });
-    $("#wheelWrap").innerHTML = `
-    <svg viewBox="0 0 400 400" role="img" aria-label="Колесо европейской рулетки">
-      <defs>
-        <filter id="ballSh" x="-60%" y="-60%" width="240%" height="240%"><feDropShadow dx="1" dy="2" stdDeviation="1.6" flood-color="#000" flood-opacity=".45"/></filter>
-      </defs>
-      <circle cx="${C}" cy="${C}" r="198" fill="#2e2e2e"/>
-      <circle cx="${C}" cy="${C}" r="190" fill="#1a1a1a"/>
-      <circle cx="${C}" cy="${C}" r="160" fill="#4a4a4a"/>
-      <g id="wheelRot">
-        ${pockets}
-        ${labels}
-        <circle cx="${C}" cy="${C}" r="112" fill="#222222" stroke="#4a4a4a" stroke-width="1.5"/>
-        <circle cx="${C}" cy="${C}" r="84" fill="none" stroke="#333333" stroke-width="1"/>
-                      </g>
-      <circle id="ball" r="6.6" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.5" filter="url(#ballSh)"/>
-    </svg>`;
+  function toast(el, text, good) {
+    if (!el) return;
+    el.innerHTML = text;
+    el.style.color = good === true ? "var(--ink)" : good === false ? "var(--mid)" : "var(--muted)";
   }
-  buildWheel();
-  const wheelG = $("#wheelRot"), ball = $("#ball");
+  async function copy(text, btn) {
+    try { await navigator.clipboard.writeText(text); }
+    catch (e) { const t = document.createElement("textarea"); t.value = text; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove(); }
+    if (btn) { const o = btn.textContent; btn.textContent = "Скопировано"; setTimeout(() => btn.textContent = o, 1200); }
+  }
 
-  /* ================= state ================= */
+  /* ============ общий банк ============ */
   const START_BALANCE = 5000;
-  let balance = START_BALANCE, shownBalance = START_BALANCE;
-  let chip = 50, bets = {}, betLog = [], lastBets = null;
-  let spinning = false;
-  let wheelAngle = 0, restNum = 0, ballAbs = angleOf(0), ballR = POCKET_R;
-  let history = [];
-  let pendingPayout = 0;
-
-  /* ================= saving (localStorage) ================= */
-  const STORE_KEY = "lucky-casino-v1";
-  function save() {
-    try {
-      // stakes still lying on the table are counted as balance, so a reload never eats them
-      const safe = spinning ? balance + pendingPayout : balance + total();
-      localStorage.setItem(STORE_KEY, JSON.stringify({ balance: safe, history: history, chip: chip, lastBets: lastBets }));
-    } catch (e) { /* storage unavailable (private mode etc.) — the game still works */ }
-  }
-  (function load() {
-    try {
-      const d = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
-      if (!d) return;
-      if (Number.isFinite(d.balance) && d.balance >= 0) { balance = Math.floor(d.balance); shownBalance = balance; }
-      if (Array.isArray(d.history)) history = d.history.filter(n => Number.isInteger(n) && n >= 0 && n <= 36).slice(0, 14);
-      if ([10, 50, 100, 500].includes(d.chip)) chip = d.chip;
-      if (d.lastBets && typeof d.lastBets === "object") {
-        const clean = {};
-        for (const k in d.lastBets) { if (betInfo(k) && Number.isFinite(d.lastBets[k]) && d.lastBets[k] > 0) clean[k] = d.lastBets[k]; }
-        if (Object.keys(clean).length) lastBets = clean;
-      }
-    } catch (e) {}
-  })();
-
-  const balEl = $("#balance"), totalEl = $("#total");
-  const spinBtn = $("#spinBtn"), undoBtn = $("#undoBtn"), clearBtn = $("#clearBtn"),
-        repeatBtn = $("#repeatBtn"), doubleBtn = $("#doubleBtn"), resetBtn = $("#resetBtn");
-
-  /* ================= board ================= */
-  const cells = {};
-  function makeCell(key, cls, html, parent, style) {
-    const b = document.createElement("button");
-    b.className = "cell " + cls;
-    b.dataset.key = key;
-    if (style) b.style.cssText = style;
-    b.innerHTML = html + '<i class="stake" hidden></i>';
-    b.addEventListener("click", () => placeBet(key));
-    parent.appendChild(b);
-    cells[key] = b;
-    return b;
-  }
-  const zero = makeCell("n:0", "green zero", "0", $("#zeroRow"));
-  zero.setAttribute("aria-label", "Зеро, выплата 36 к 1");
-  for (let n = 1; n <= 36; n++) {
-    const r = n % 3 === 0 ? 1 : n % 3 === 2 ? 2 : 3;
-    const style = `--r:${r};--c:${Math.ceil(n/3)};--vr:${Math.ceil(n/3)};--vc:${(n-1)%3+1}`;
-    const el = makeCell("n:" + n, colorOf(n), String(n), $("#numbers"), style);
-    el.setAttribute("aria-label", `${n}, ${colorOf(n) === "red" ? "красное" : "чёрное"}, выплата 36 к 1`);
-  }
-  DOZENS.forEach(d => makeCell(d.key, "", `<span class="lbl">${d.label}</span><small>×3</small>`, $("#dozens")));
-  OUTSIDE.forEach(o => makeCell(o.key, o.cls || "", `<span class="lbl">${o.label}</span><small>×2</small>`, $("#outside")));
-
-  const total = () => Object.values(bets).reduce((a, b) => a + b, 0);
-  const short = v => v >= 10000 ? Math.round(v / 1000) + "k" : v >= 1000 ? (v / 1000).toFixed(1).replace(".0", "") + "k" : String(v);
-
-  function renderBets() {
-    for (const key in cells) {
-      const st = cells[key].querySelector(".stake");
-      const v = bets[key];
-      if (v) {
-        if (st.hidden || st.textContent !== short(v)) { st.hidden = false; st.style.animation = "none"; void st.offsetWidth; st.style.animation = ""; }
-        st.textContent = short(v);
-      } else { st.hidden = true; }
+  const Bank = (function () {
+    let bal = store.get("balance", START_BALANCE);
+    if (!Number.isFinite(bal) || bal < 0) bal = START_BALANCE;
+    let shown = bal;
+    const el = $("#balance");
+    function paint(animate) {
+      if (!animate || reduce) { shown = bal; el.textContent = fmt(bal); return; }
+      const from = shown, s = performance.now();
+      (function f(now) {
+        const t = Math.min(1, (now - s) / 800);
+        shown = Math.round(from + (bal - from) * (1 - Math.pow(1 - t, 3)));
+        el.textContent = fmt(shown);
+        if (t < 1) requestAnimationFrame(f);
+      })(s);
     }
-    const t = total();
-    totalEl.textContent = fmt(t);
-    spinBtn.disabled = spinning || t === 0;
-    undoBtn.disabled = spinning || betLog.length === 0;
-    clearBtn.disabled = spinning || t === 0;
-    doubleBtn.disabled = spinning || t === 0;
-    repeatBtn.disabled = spinning || !lastBets;
-    resetBtn.disabled = spinning;
-    save();
-  }
-
-  function clearMarks() {
-    for (const k in cells) cells[k].classList.remove("win", "hit");
-    document.querySelectorAll(".pk.hit").forEach(p => p.classList.remove("hit"));
-  }
-
-  function setBalance(v, animate) {
-    const from = shownBalance;
-    balance = v;
-    if (!animate || reduce) { shownBalance = v; balEl.textContent = fmt(v); return; }
-    const s = performance.now();
-    (function f(now) {
-      const t = Math.min(1, (now - s) / 900);
-      shownBalance = Math.round(from + (v - from) * (1 - Math.pow(1 - t, 3)));
-      balEl.textContent = fmt(shownBalance);
-      if (t < 1) requestAnimationFrame(f);
-    })(s);
-  }
-
-  function renderHistory() {
-    $("#history").innerHTML = history.map(h => `<span class="dot ${colorOf(h)}">${h}</span>`).join("");
-  }
-
-  function say(title, sub, tone) {
-    $("#resTitle").textContent = title;
-    const s = $("#resSub");
-    s.textContent = sub;
-    s.className = tone || "";
-  }
-
-  /* ================= betting actions ================= */
-  function placeBet(key, amount) {
-    if (spinning) return;
-    const a = amount || chip;
-    if (balance < a) {
+    function set(v, animate) { bal = Math.max(0, Math.round(v)); store.set("balance", bal); paint(animate); }
+    function deny() {
       const box = $("#balanceBox");
       box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake");
-      say("Не хватает монет", "Выбери фишку поменьше или сбрось баланс.");
-      return;
     }
-    clearMarks();
-    balance -= a; shownBalance = balance; balEl.textContent = fmt(balance);
-    bets[key] = (bets[key] || 0) + a;
-    betLog.push({ key, a });
-    if (total() === a) say("Ставки принимаются", "Добавь ещё или нажми «Крутить».");
-    renderBets();
-  }
-  function refundAll() {
-    const t = total();
-    balance += t; shownBalance = balance; balEl.textContent = fmt(balance);
-    bets = {}; betLog = [];
-  }
-  undoBtn.onclick = () => {
-    if (spinning || !betLog.length) return;
-    const { key, a } = betLog.pop();
-    bets[key] -= a; if (bets[key] <= 0) delete bets[key];
-    balance += a; shownBalance = balance; balEl.textContent = fmt(balance);
-    renderBets();
-  };
-  clearBtn.onclick = () => { if (spinning) return; refundAll(); renderBets(); };
-  repeatBtn.onclick = () => {
-    if (spinning || !lastBets) return;
-    refundAll(); clearMarks();
-    const need = Object.values(lastBets).reduce((a, b) => a + b, 0);
-    if (need > balance) { say("Не хватает монет", `Прошлые ставки — ${fmt(need)}, а на балансе ${fmt(balance)}.`); renderBets(); return; }
-    for (const k in lastBets) { bets[k] = lastBets[k]; betLog.push({ key: k, a: lastBets[k] }); }
-    balance -= need; shownBalance = balance; balEl.textContent = fmt(balance);
-    renderBets();
-  };
-  doubleBtn.onclick = () => {
-    if (spinning) return;
-    const t = total();
-    if (!t) return;
-    if (t > balance) { say("Не хватает монет", "Чтобы удвоить, нужно ещё " + fmt(t - balance) + "."); return; }
-    Object.keys(bets).slice().forEach(k => { const a = bets[k]; bets[k] += a; betLog.push({ key: k, a }); });
-    balance -= t; shownBalance = balance; balEl.textContent = fmt(balance);
-    renderBets();
-  };
-  resetBtn.onclick = () => {
-    if (spinning) return;
-    bets = {}; betLog = []; clearMarks();
-    setBalance(START_BALANCE, true);
-    say("Баланс восстановлен", "5 000 демо-монет на счёте.");
-    renderBets();
-  };
-  document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => {
-    chip = +c.dataset.v;
-    document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", String(x === c)));
-  }));
+    paint(false);
+    return {
+      get: () => bal,
+      set: set,
+      add: (v, a) => set(bal + v, a !== false),
+      take(v) { if (v <= 0 || v > bal) { deny(); return false; } set(bal - v, false); return true; },
+      deny: deny,
+      reset() { set(START_BALANCE, true); }
+    };
+  })();
+  $("#resetBank").onclick = () => Bank.reset();
 
-  /* ================= animation ================= */
-  function render() {
-    wheelG.setAttribute("transform", `rotate(${wheelAngle} ${C} ${C})`);
-    const [x, y] = polar(ballR, ballAbs);
-    ball.setAttribute("cx", x); ball.setAttribute("cy", y);
+  /* ============ навигация ============ */
+  $$(".nav [data-view]").forEach(b => b.onclick = () => {
+    $$(".nav [data-view]").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+    $$(".view").forEach(v => v.classList.toggle("on", v.id === "view-" + b.dataset.view));
+  });
+  $$(".subnav").forEach(nav => {
+    const tabs = $$("[data-page]", nav);
+    const scope = nav.parentElement;
+    tabs.forEach(b => b.onclick = () => {
+      tabs.forEach(x => x.setAttribute("aria-selected", String(x === b)));
+      $$(".page", scope).forEach(p => p.classList.toggle("on", p.id === "page-" + b.dataset.page));
+      document.dispatchEvent(new CustomEvent("pageshown", { detail: b.dataset.page }));
+    });
+  });
+
+  /* ============ поле ставки ============ */
+  function betField(scope) {
+    const root = $('.bet-box[data-scope="' + scope + '"]');
+    const inp = $("[data-bet]", root);
+    const norm = v => Math.max(10, Math.round(v / 10) * 10);
+    $$("[data-betact]", root).forEach(b => b.onclick = () => {
+      let v = +inp.value || 10;
+      const a = b.dataset.betact;
+      if (a === "half") v = v / 2;
+      if (a === "double") v = v * 2;
+      if (a === "max") v = Bank.get();
+      inp.value = Math.max(10, Math.min(Math.max(Bank.get(), 10), norm(v)));
+    });
+    return () => Math.max(0, Math.round(+inp.value || 0));
   }
 
-  let lastT = performance.now();
-  function idle(now) {
-    const dt = now - lastT; lastT = now;
-    if (!spinning) {
-      if (!reduce) wheelAngle = (wheelAngle + dt * 0.006) % 360;
-      ballAbs = wheelAngle + angleOf(restNum);
-      ballR = POCKET_R;
-      render();
+  /* =========================================================
+     РУЛЕТКА
+     ========================================================= */
+  (function roulette() {
+    const ORDER = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
+    const REDS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+    const colorOf = n => n === 0 ? "green" : REDS.has(n) ? "red" : "black";
+    const STEP = 360 / 37;
+    const angleOf = n => ORDER.indexOf(n) * STEP;
+
+    const OUTSIDE = [
+      { key: "low",   label: "1–18",    mult: 2, test: n => n >= 1 && n <= 18 },
+      { key: "even",  label: "Чёт",     mult: 2, test: n => n > 0 && n % 2 === 0 },
+      { key: "red",   label: "Красное", mult: 2, test: n => colorOf(n) === "red",   cls: "red" },
+      { key: "black", label: "Чёрное",  mult: 2, test: n => colorOf(n) === "black", cls: "black" },
+      { key: "odd",   label: "Нечёт",   mult: 2, test: n => n % 2 === 1 },
+      { key: "high",  label: "19–36",   mult: 2, test: n => n >= 19 }
+    ];
+    const DOZENS = [
+      { key: "d1", label: "1–12",  mult: 3, test: n => n >= 1  && n <= 12 },
+      { key: "d2", label: "13–24", mult: 3, test: n => n >= 13 && n <= 24 },
+      { key: "d3", label: "25–36", mult: 3, test: n => n >= 25 }
+    ];
+    function betInfo(key) {
+      if (key.indexOf("n:") === 0) { const v = +key.slice(2); return { mult: 36, test: n => n === v }; }
+      return OUTSIDE.concat(DOZENS).filter(b => b.key === key)[0];
     }
-    requestAnimationFrame(idle);
-  }
-  requestAnimationFrame(idle);
 
-  const lerp = (a, b, t) => a + (b - a) * t;
-  const easeIn = t => t * t;
-  const easeOut = t => 1 - Math.pow(1 - t, 3);
+    /* колесо */
+    const C = 200, POCKET_R = 135, TRACK_R = 173;
+    const polar = (r, a) => { const t = a * Math.PI / 180; return [C + r * Math.sin(t), C - r * Math.cos(t)]; };
+    const sector = (r1, r2, a1, a2) => {
+      const p1 = polar(r2, a1), p2 = polar(r2, a2), p3 = polar(r1, a2), p4 = polar(r1, a1);
+      return "M" + p1[0] + " " + p1[1] + "A" + r2 + " " + r2 + " 0 0 1 " + p2[0] + " " + p2[1] +
+             "L" + p3[0] + " " + p3[1] + "A" + r1 + " " + r1 + " 0 0 0 " + p4[0] + " " + p4[1] + "Z";
+    };
+    (function buildWheel() {
+      const fills = { red: "#e8e8e8", black: "#0d0d0d", green: "#6b6b6b" };
+      const inks  = { red: "#111111", black: "#e8e8e8", green: "#ffffff" };
+      let pockets = "", labels = "";
+      ORDER.forEach((n, i) => {
+        const a = i * STEP, col = colorOf(n);
+        pockets += '<path class="pk" id="pk-' + n + '" d="' + sector(112, 158, a - STEP/2, a + STEP/2) + '" fill="' + fills[col] + '" stroke="#4a4a4a" stroke-width=".8"/>';
+        labels += '<text x="' + C + '" y="' + (C - 146) + '" transform="rotate(' + a + ' ' + C + ' ' + C + ')" text-anchor="middle" dominant-baseline="middle" font-family="Onest, sans-serif" font-size="11.5" font-weight="500" fill="' + inks[col] + '">' + n + '</text>';
+      });
+      $("#wheelWrap").innerHTML =
+      '<svg viewBox="0 0 400 400" role="img" aria-label="Колесо европейской рулетки">' +
+        '<defs><filter id="ballSh" x="-60%" y="-60%" width="240%" height="240%"><feDropShadow dx="1" dy="2" stdDeviation="1.6" flood-color="#000" flood-opacity=".45"/></filter></defs>' +
+        '<circle cx="200" cy="200" r="198" fill="#2e2e2e"/><circle cx="200" cy="200" r="190" fill="#1a1a1a"/><circle cx="200" cy="200" r="160" fill="#4a4a4a"/>' +
+        '<g id="wheelRot">' + pockets + labels +
+        '<circle cx="200" cy="200" r="112" fill="#222222" stroke="#4a4a4a" stroke-width="1.5"/>' +
+        '<circle cx="200" cy="200" r="84" fill="none" stroke="#333333" stroke-width="1"/></g>' +
+        '<circle id="ball" r="6.6" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.5" filter="url(#ballSh)"/>' +
+      '</svg>';
+    })();
+    const wheelG = $("#wheelRot"), ball = $("#ball");
 
-  function runSpin(n) {
-    return new Promise(resolve => {
-      const T = reduce ? 2200 : 7400;
-      const W0 = wheelAngle % 360;
-      const dW = (reduce ? 360 : 1080) + Math.random() * 360;
-      const Wf = W0 + dW;
-      const Bf = Wf + angleOf(n);
-      const D = (((ballAbs - Bf) % 360) + 360) % 360 + 360 * (reduce ? 2 : 7);
-      const start = performance.now();
+    let chip = store.get("chip", 50), bets = {}, betLog = [], lastBets = store.get("lastBets", null);
+    let spinning = false, wheelAngle = 0, restNum = 0, ballAbs = angleOf(0), ballR = POCKET_R;
+    let history = store.get("history", []) || [];
+    if (!Array.isArray(history)) history = [];
+    if ([10, 50, 100, 500].indexOf(chip) < 0) chip = 50;
+    if (lastBets && typeof lastBets === "object") {
+      const clean = {};
+      for (const k in lastBets) if (betInfo(k) && lastBets[k] > 0) clean[k] = lastBets[k];
+      lastBets = Object.keys(clean).length ? clean : null;
+    } else lastBets = null;
+
+    const totalEl = $("#total"), spinBtn = $("#spinBtn");
+    const cells = {};
+    function makeCell(key, cls, html, parent, style) {
+      const b = document.createElement("button");
+      b.className = "cell " + cls;
+      b.dataset.key = key;
+      if (style) b.style.cssText = style;
+      b.innerHTML = html + '<i class="stake" hidden></i>';
+      b.addEventListener("click", () => placeBet(key));
+      parent.appendChild(b);
+      cells[key] = b;
+      return b;
+    }
+    makeCell("n:0", "green zero", "0", $("#zeroRow")).setAttribute("aria-label", "Зеро, выплата 36 к 1");
+    for (let n = 1; n <= 36; n++) {
+      const r = n % 3 === 0 ? 1 : n % 3 === 2 ? 2 : 3;
+      const style = "--r:" + r + ";--c:" + Math.ceil(n/3) + ";--vr:" + Math.ceil(n/3) + ";--vc:" + ((n-1)%3+1);
+      makeCell("n:" + n, colorOf(n), String(n), $("#numbers"), style);
+    }
+    DOZENS.forEach(d => makeCell(d.key, "", '<span class="lbl">' + d.label + '</span><small>×3</small>', $("#dozens")));
+    OUTSIDE.forEach(o => makeCell(o.key, o.cls || "", '<span class="lbl">' + o.label + '</span><small>×2</small>', $("#outside")));
+
+    const total = () => Object.keys(bets).reduce((a, k) => a + bets[k], 0);
+    const short = v => v >= 10000 ? Math.round(v / 1000) + "k" : v >= 1000 ? (v / 1000).toFixed(1).replace(".0", "") + "k" : String(v);
+
+    function renderBets() {
+      for (const key in cells) {
+        const st = $(".stake", cells[key]), v = bets[key];
+        if (v) {
+          if (st.hidden || st.textContent !== short(v)) { st.hidden = false; st.style.animation = "none"; void st.offsetWidth; st.style.animation = ""; }
+          st.textContent = short(v);
+        } else st.hidden = true;
+      }
+      const t = total();
+      totalEl.textContent = fmt(t);
+      spinBtn.disabled = spinning || t === 0;
+      $("#undoBtn").disabled = spinning || !betLog.length;
+      $("#clearBtn").disabled = spinning || t === 0;
+      $("#doubleBtn").disabled = spinning || t === 0;
+      $("#repeatBtn").disabled = spinning || !lastBets;
+    }
+    function clearMarks() {
+      for (const k in cells) cells[k].classList.remove("win", "hit");
+      $$(".pk.hit").forEach(p => p.classList.remove("hit"));
+    }
+    function say(title, sub, tone) {
+      $("#resTitle").textContent = title;
+      const s = $("#resSub"); s.textContent = sub; s.className = tone || "";
+    }
+    function renderHistory() {
+      $("#history").innerHTML = history.map(h => '<span class="dot ' + colorOf(h) + '">' + h + "</span>").join("");
+    }
+
+    function placeBet(key, amount) {
+      if (spinning) return;
+      const a = amount || chip;
+      if (!Bank.take(a)) { say("Не хватает монет", "Выбери фишку поменьше или сбрось баланс."); return; }
+      clearMarks();
+      bets[key] = (bets[key] || 0) + a;
+      betLog.push({ key: key, a: a });
+      if (total() === a) say("Ставки принимаются", "Добавь ещё или нажми «Крутить».");
+      renderBets();
+    }
+    function refundAll() { const t = total(); if (t) Bank.add(t, false); bets = {}; betLog = []; }
+
+    $("#undoBtn").onclick = () => {
+      if (spinning || !betLog.length) return;
+      const last = betLog.pop();
+      bets[last.key] -= last.a; if (bets[last.key] <= 0) delete bets[last.key];
+      Bank.add(last.a, false); renderBets();
+    };
+    $("#clearBtn").onclick = () => { if (!spinning) { refundAll(); renderBets(); } };
+    $("#repeatBtn").onclick = () => {
+      if (spinning || !lastBets) return;
+      refundAll(); clearMarks();
+      const need = Object.keys(lastBets).reduce((a, k) => a + lastBets[k], 0);
+      if (need > Bank.get()) { Bank.deny(); say("Не хватает монет", "Прошлые ставки — " + fmt(need) + ", а на балансе " + fmt(Bank.get()) + "."); renderBets(); return; }
+      for (const k in lastBets) { bets[k] = lastBets[k]; betLog.push({ key: k, a: lastBets[k] }); }
+      Bank.take(need); renderBets();
+    };
+    $("#doubleBtn").onclick = () => {
+      if (spinning) return;
+      const t = total(); if (!t) return;
+      if (t > Bank.get()) { Bank.deny(); say("Не хватает монет", "Чтобы удвоить, нужно ещё " + fmt(t - Bank.get()) + "."); return; }
+      Object.keys(bets).forEach(k => { const a = bets[k]; bets[k] += a; betLog.push({ key: k, a: a }); });
+      Bank.take(t); renderBets();
+    };
+    $$(".chip").forEach(c => c.addEventListener("click", () => {
+      chip = +c.dataset.v; store.set("chip", chip);
+      $$(".chip").forEach(x => x.setAttribute("aria-pressed", String(x === c)));
+    }));
+
+    function render() {
+      wheelG.setAttribute("transform", "rotate(" + wheelAngle + " 200 200)");
+      const p = polar(ballR, ballAbs);
+      ball.setAttribute("cx", p[0]); ball.setAttribute("cy", p[1]);
+    }
+    let lastT = performance.now();
+    (function idle(now) {
+      const dt = now - lastT; lastT = now;
+      if (!spinning) {
+        if (!reduce) wheelAngle = (wheelAngle + dt * 0.006) % 360;
+        ballAbs = wheelAngle + angleOf(restNum); ballR = POCKET_R; render();
+      }
+      requestAnimationFrame(idle);
+    })(lastT);
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const easeIn = t => t * t;
+    const easeOut = t => 1 - Math.pow(1 - t, 3);
+
+    function runSpin(n) {
+      return new Promise(resolve => {
+        const T = reduce ? 2000 : 7000;
+        const W0 = wheelAngle % 360;
+        const dW = (reduce ? 360 : 1080) + Math.random() * 360;
+        const Wf = W0 + dW, Bf = Wf + angleOf(n);
+        const D = ((((ballAbs - Bf) % 360) + 360) % 360) + 360 * (reduce ? 2 : 7);
+        const start = performance.now();
+        (function frame(now) {
+          const t = Math.min(1, (now - start) / T);
+          wheelAngle = W0 + dW * easeOut(t);
+          ballAbs = Bf + D * Math.pow(1 - t, 2.4);
+          if (t < 0.06) ballR = lerp(POCKET_R, TRACK_R, easeOut(t / 0.06));
+          else if (t < 0.6) ballR = TRACK_R;
+          else if (t < 0.8) ballR = lerp(TRACK_R, POCKET_R, easeIn((t - 0.6) / 0.2));
+          else { const u = (t - 0.8) / 0.2; ballR = POCKET_R - 10 * Math.pow(1 - u, 2) * Math.abs(Math.sin(u * Math.PI * 3)); }
+          render();
+          if (t < 1) requestAnimationFrame(frame);
+          else { wheelAngle = Wf; ballAbs = Bf; ballR = POCKET_R; render(); resolve(); }
+        })(start);
+      });
+    }
+
+    function setSpinning(v) {
+      spinning = v;
+      document.body.classList.toggle("spinning", v);
+      $$(".chip").forEach(c => c.disabled = v);
+      $("#resetBank").disabled = v;
+      renderBets();
+    }
+
+    spinBtn.onclick = async function spin() {
+      if (spinning || total() === 0) return;
+      const stake = total(), n = rnd(37);
+      let payout = 0; const winKeys = [];
+      for (const key in bets) { const info = betInfo(key); if (info.test(n)) { payout += bets[key] * info.mult; winKeys.push(key); } }
+      clearMarks(); setSpinning(true);
+      say("Ставок больше нет", "Шарик пошёл…");
+      $("#resNum").className = "res-num"; $("#resNum").textContent = "…";
+
+      await runSpin(n);
+      restNum = n; wheelAngle = wheelAngle % 360;
+      winKeys.forEach(k => cells[k].classList.add("win"));
+      cells["n:" + n].classList.add("hit");
+      $("#pk-" + n).classList.add("hit");
+
+      lastBets = Object.assign({}, bets); store.set("lastBets", lastBets);
+      bets = {}; betLog = [];
+      if (payout) Bank.add(payout, true);
+
+      const net = payout - stake, col = colorOf(n), num = $("#resNum");
+      num.textContent = n; num.className = "res-num " + col; void num.offsetWidth; num.classList.add("pop");
+      const colName = col === "green" ? "Зеро" : col === "red" ? "Красное" : "Чёрное";
+      const parity = n === 0 ? "" : n % 2 === 0 ? ", чётное" : ", нечётное";
+      if (net > 0) {
+        say(colName + parity, "Выигрыш +" + fmt(net) + " монет", "plus");
+        const f = document.createElement("div"); f.className = "float"; f.textContent = "+" + fmt(net);
+        $(".plate").appendChild(f); setTimeout(() => f.remove(), 1900);
+      } else if (net === 0) say(colName + parity, "Ставки вернулись, баланс без изменений");
+      else say(colName + parity, "Проигрыш −" + fmt(-net) + " монет");
+
+      history.unshift(n); history = history.slice(0, 14); store.set("history", history); renderHistory();
+      setSpinning(false);
+      if (Bank.get() < 10) say("Монеты закончились", "Нажми «Сбросить», чтобы начать заново.");
+    };
+
+    $$(".chip").forEach(c => c.setAttribute("aria-pressed", String(+c.dataset.v === chip)));
+    if (history.length) {
+      restNum = history[0]; ballAbs = angleOf(restNum); renderHistory();
+      const num = $("#resNum"); num.textContent = restNum; num.className = "res-num " + colorOf(restNum);
+      say("С возвращением", "Баланс сохранён. Делай ставки.");
+    }
+    window.addEventListener("pagehide", () => { if (!spinning) refundAll(); });
+    renderBets(); render();
+  })();
+
+  /* =========================================================
+     СЛОТЫ
+     ========================================================= */
+  (function slots() {
+    const SYMS = [
+      { s: "🍒", w: 28, m: 5 }, { s: "🍋", w: 24, m: 8 }, { s: "🔔", w: 18, m: 14 },
+      { s: "⭐", w: 14, m: 25 }, { s: "💎", w: 10, m: 60 }, { s: "7️⃣", w: 6, m: 150 }
+    ];
+    const TOTAL_W = SYMS.reduce((a, s) => a + s.w, 0);
+    const pick = () => { let r = Math.random() * TOTAL_W; for (const s of SYMS) { r -= s.w; if (r <= 0) return s; } return SYMS[0]; };
+    $("#payTable").innerHTML = SYMS.slice().reverse().map(s =>
+      "<tr><td>" + s.s + s.s + s.s + "</td><td>три в ряд</td><td>×" + s.m + "</td></tr>").join("") +
+      "<tr><td>любые</td><td>два одинаковых</td><td>×1</td></tr>";
+
+    const bet = betField("slots");
+    const reels = $$("#reels .reel");
+    const out = $("#slotOut");
+    let busy = false;
+
+    $("#slotSpin").onclick = () => {
+      if (busy) return;
+      const b = bet();
+      if (b < 10) { toast(out, "Минимальная ставка — 10 монет."); return; }
+      if (!Bank.take(b)) { toast(out, "Не хватает монет на эту ставку.", false); return; }
+      busy = true; $("#slotSpin").disabled = true;
+      const res = [pick(), pick(), pick()];
+      reels.forEach(r => r.classList.remove("hit"));
+      toast(out, "Крутим…");
+
+      const timers = reels.map((r, i) => {
+        r.classList.add("spin-blur");
+        const iv = setInterval(() => { r.textContent = SYMS[rnd(SYMS.length)].s; }, reduce ? 200 : 60);
+        setTimeout(() => {
+          clearInterval(iv);
+          r.classList.remove("spin-blur");
+          r.textContent = res[i].s;
+          if (i === 2) finish(res, b);
+        }, reduce ? 300 : 700 + i * 450);
+        return iv;
+      });
+
+      function finish(res, b) {
+        const a = res[0].s, c = res[1].s, d = res[2].s;
+        let mult = 0, msg;
+        if (a === c && c === d) { mult = res[0].m; msg = "Три " + a + " подряд"; reels.forEach(r => r.classList.add("hit")); }
+        else if (a === c || c === d || a === d) {
+          mult = 1; msg = "Два одинаковых — ставка вернулась";
+          const dup = a === c ? a : c === d ? c : a;
+          reels.forEach(r => { if (r.textContent === dup) r.classList.add("hit"); });
+        } else msg = "Мимо";
+        const win = Math.round(b * mult);
+        if (win) Bank.add(win, true);
+        const net = win - b;
+        toast(out, msg + " · " + (net > 0 ? "<b>+" + fmt(net) + "</b> монет" : net === 0 ? "баланс без изменений" : "−" + fmt(-net) + " монет"), net > 0 ? true : net === 0 ? null : false);
+        busy = false; $("#slotSpin").disabled = false;
+      }
+    };
+  })();
+
+  /* =========================================================
+     МИНЫ
+     ========================================================= */
+  (function mines() {
+    const grid = $("#mineGrid"), out = $("#mineOut");
+    const bet = betField("mines");
+    const tiles = [];
+    for (let i = 0; i < 25; i++) {
+      const b = document.createElement("button");
+      b.className = "tile"; b.disabled = true; b.dataset.i = i;
+      b.onclick = () => open(i);
+      grid.appendChild(b); tiles.push(b);
+    }
+    let live = false, bombs = new Set(), opened = 0, stake = 0, mines = 5;
+
+    const multOf = (picks, m) => {
+      let k = 1;
+      for (let i = 0; i < picks; i++) k *= (25 - i) / (25 - m - i);
+      return k * 0.97;
+    };
+    function paintStats() {
+      const k = live ? multOf(opened, mines) : 1;
+      $("#mineMult").textContent = k.toFixed(2) + "×";
+      $("#minePay").textContent = live ? fmt(stake * k) : "0";
+      $("#mineOpen").textContent = opened + (live ? "/" + (25 - mines) : "");
+      $("#mineCash").disabled = !live || opened === 0;
+    }
+    function reset(showAll) {
+      tiles.forEach((t, i) => {
+        t.disabled = true;
+        if (showAll) { t.classList.toggle("bomb", bombs.has(i)); t.textContent = bombs.has(i) ? "💣" : t.textContent; t.classList.add("shown"); }
+        else { t.className = "tile"; t.textContent = ""; }
+      });
+    }
+    $("#mineStart").onclick = () => {
+      if (live) return;
+      const b = bet();
+      mines = +$("#mineCount").value;
+      if (b < 10) { toast(out, "Минимальная ставка — 10 монет."); return; }
+      if (!Bank.take(b)) { toast(out, "Не хватает монет на эту ставку.", false); return; }
+      stake = b; opened = 0; live = true; bombs = new Set();
+      while (bombs.size < mines) bombs.add(rnd(25));
+      reset(false);
+      tiles.forEach(t => t.disabled = false);
+      $("#mineStart").disabled = true;
+      toast(out, "Открывай ячейки. Забрать можно в любой момент.");
+      paintStats();
+    };
+    function open(i) {
+      if (!live || tiles[i].classList.contains("gem")) return;
+      if (bombs.has(i)) {
+        live = false;
+        tiles[i].classList.add("bomb"); tiles[i].textContent = "💣";
+        reset(true);
+        $("#mineStart").disabled = false;
+        toast(out, "Мина. Ставка " + fmt(stake) + " сгорела.", false);
+        stake = 0; opened = 0; paintStats();
+        return;
+      }
+      tiles[i].classList.add("gem"); tiles[i].textContent = "💎"; tiles[i].disabled = true;
+      opened++;
+      if (opened === 25 - mines) { cash(); return; }
+      paintStats();
+    }
+    function cash() {
+      if (!live || !opened) return;
+      const win = Math.round(stake * multOf(opened, mines));
+      Bank.add(win, true);
+      live = false; reset(true);
+      $("#mineStart").disabled = false;
+      toast(out, "Забрано <b>" + fmt(win) + "</b> монет (чистыми +" + fmt(win - stake) + ").", true);
+      stake = 0; opened = 0; paintStats();
+    }
+    $("#mineCash").onclick = cash;
+    paintStats();
+  })();
+
+  /* =========================================================
+     КРАШ
+     ========================================================= */
+  (function crash() {
+    const bet = betField("crash");
+    const cv = $("#crashCv"), ctx = cv.getContext("2d");
+    const valEl = $("#crashVal"), out = $("#crashOut"), btn = $("#crashBtn");
+    let tape = store.get("crashTape", []) || [];
+    let running = false, stake = 0, mult = 1, crashAt = 1, t0 = 0, cashed = false, raf = 0;
+
+    function paintTape() {
+      $("#crashTape").innerHTML = tape.map(v => '<span class="' + (v >= 2 ? "hi" : "") + '">' + v.toFixed(2) + "×</span>").join("");
+    }
+    paintTape();
+
+    function draw(points, dead) {
+      const w = cv.width, h = cv.height;
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = "#2b2b2b"; ctx.lineWidth = 1;
+      for (let i = 1; i < 4; i++) { ctx.beginPath(); ctx.moveTo(0, h * i / 4); ctx.lineTo(w, h * i / 4); ctx.stroke(); }
+      if (points.length < 2) return;
+      const maxY = Math.max(2, points[points.length - 1].m);
+      const maxX = Math.max(4, points[points.length - 1].t);
+      ctx.beginPath();
+      points.forEach((p, i) => {
+        const x = (p.t / maxX) * (w - 12) + 6;
+        const y = h - 6 - ((p.m - 1) / (maxY - 1)) * (h - 22);
+        i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      });
+      ctx.strokeStyle = dead ? "#6b6b6b" : "#e8e8e8";
+      ctx.lineWidth = 2.5; ctx.lineJoin = "round"; ctx.stroke();
+      ctx.lineTo(cv.width - 6, h - 6); ctx.lineTo(6, h - 6); ctx.closePath();
+      ctx.fillStyle = dead ? "rgba(107,107,107,.12)" : "rgba(232,232,232,.1)"; ctx.fill();
+    }
+
+    function stop(dead) {
+      running = false; cancelAnimationFrame(raf);
+      btn.textContent = "Запустить"; btn.disabled = false;
+      $("#crashStake").textContent = "0"; $("#crashNow").textContent = "0";
+      tape.unshift(crashAt); tape = tape.slice(0, 12); store.set("crashTape", tape); paintTape();
+      valEl.classList.toggle("dead", !!dead);
+    }
+
+    btn.onclick = () => {
+      if (running) { cashOut(); return; }
+      const b = bet();
+      if (b < 10) { toast(out, "Минимальная ставка — 10 монет."); return; }
+      if (!Bank.take(b)) { toast(out, "Не хватает монет на эту ставку.", false); return; }
+      stake = b; cashed = false; mult = 1;
+      crashAt = Math.max(1, Math.floor((0.99 / (1 - Math.random())) * 100) / 100);
+      const auto = +$("#crashAuto").value || 0;
+      const pts = [{ t: 0, m: 1 }];
+      t0 = performance.now();
+      running = true;
+      btn.textContent = "Забрать";
+      valEl.classList.remove("dead");
+      $("#crashStake").textContent = fmt(stake);
+      toast(out, "Раунд идёт. Жми «Забрать».");
 
       (function frame(now) {
-        const t = Math.min(1, (now - start) / T);
-        wheelAngle = W0 + dW * easeOut(t);
-        ballAbs = Bf + D * Math.pow(1 - t, 2.4);
+        const t = (now - t0) / 1000;
+        mult = Math.exp(0.09 * t);
+        if (mult >= crashAt) {
+          mult = crashAt;
+          pts.push({ t: t, m: mult }); draw(pts, true);
+          valEl.textContent = crashAt.toFixed(2) + "×";
+          if (!cashed) toast(out, "Обвал на " + crashAt.toFixed(2) + "× — ставка " + fmt(stake) + " сгорела.", false);
+          stop(true);
+          return;
+        }
+        pts.push({ t: t, m: mult });
+        valEl.textContent = mult.toFixed(2) + "×";
+        $("#crashNow").textContent = fmt(stake * mult);
+        draw(pts, false);
+        if (auto >= 1.01 && mult >= auto) { cashOut(); return; }
+        raf = requestAnimationFrame(frame);
+      })(t0);
+    };
 
-        if (t < 0.06) ballR = lerp(POCKET_R, TRACK_R, easeOut(t / 0.06));
-        else if (t < 0.6) ballR = TRACK_R;
-        else if (t < 0.8) ballR = lerp(TRACK_R, POCKET_R, easeIn((t - 0.6) / 0.2));
-        else { const u = (t - 0.8) / 0.2; ballR = POCKET_R - 10 * Math.pow(1 - u, 2) * Math.abs(Math.sin(u * Math.PI * 3)); }
+    function cashOut() {
+      if (!running || cashed) return;
+      cashed = true;
+      const win = Math.round(stake * mult);
+      Bank.add(win, true);
+      toast(out, "Забрано на " + mult.toFixed(2) + "× — <b>+" + fmt(win - stake) + "</b> монет. Обвал был бы на " + crashAt.toFixed(2) + "×.", true);
+      stop(false);
+    }
+    draw([], false);
+  })();
 
-        render();
-        if (t < 1) requestAnimationFrame(frame);
-        else { wheelAngle = Wf; ballAbs = Bf; ballR = POCKET_R; render(); resolve(); }
-      })(start);
+  /* =========================================================
+     КОСТИ
+     ========================================================= */
+  (function dice() {
+    const bet = betField("dice");
+    const out = $("#diceOut"), valEl = $("#diceVal");
+    let mode = "under", target = 50, tape = [];
+
+    function chance() { return mode === "under" ? target : 100 - target; }
+    function payout() { return 99 / chance(); }
+    function paint() {
+      $("#diceTargetVal").textContent = target.toFixed(2);
+      $("#diceChance").textContent = chance().toFixed(0) + "%";
+      $("#dicePay").textContent = payout().toFixed(2) + "×";
+      const zone = $("#diceZone");
+      if (mode === "under") { zone.style.left = "0"; zone.style.right = (100 - target) + "%"; }
+      else { zone.style.left = target + "%"; zone.style.right = "0"; }
+      $("#diceMark").style.left = "calc(" + target + "% - 1px)";
+    }
+    $("#diceTarget").oninput = e => { target = +e.target.value; paint(); };
+    $$("[data-dicemode]").forEach(b => b.onclick = () => {
+      mode = b.dataset.dicemode;
+      $$("[data-dicemode]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+      paint();
     });
-  }
+    $("#diceRoll").onclick = () => {
+      const b = bet();
+      if (b < 10) { toast(out, "Минимальная ставка — 10 монет."); return; }
+      if (!Bank.take(b)) { toast(out, "Не хватает монет на эту ставку.", false); return; }
+      const roll = Math.round(Math.random() * 10000) / 100;
+      const win = mode === "under" ? roll < target : roll > target;
+      valEl.textContent = roll.toFixed(2);
+      valEl.className = "dice-val " + (win ? "win" : "lose");
+      if (win) {
+        const pay = Math.round(b * payout());
+        Bank.add(pay, true);
+        toast(out, "Есть! <b>+" + fmt(pay - b) + "</b> монет при выплате " + payout().toFixed(2) + "×.", true);
+      } else toast(out, "Не зашло: −" + fmt(b) + " монет.", false);
+      tape.unshift({ roll: roll, win: win }); tape = tape.slice(0, 12);
+      $("#diceTape").innerHTML = tape.map(x => '<span class="' + (x.win ? "hi" : "") + '">' + x.roll.toFixed(2) + "</span>").join("");
+    };
+    paint();
+  })();
 
-  /* ================= game ================= */
-  function setSpinning(v) {
-    spinning = v;
-    document.body.classList.toggle("spinning", v);
-    document.querySelectorAll(".chip").forEach(c => c.disabled = v);
-    renderBets();
-  }
+  /* =========================================================
+     БЛЭКДЖЕК
+     ========================================================= */
+  (function blackjack() {
+    const bet = betField("bj");
+    const out = $("#bjOut");
+    const dealBtn = $("#bjDeal"), hitBtn = $("#bjHit"), standBtn = $("#bjStand"), dblBtn = $("#bjDouble");
+    const RANKS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+    const SUITS = ["♠","♥","♦","♣"];
+    let deck = [], player = [], dealer = [], stake = 0, live = false, hidden = true;
 
-  async function spin() {
-    if (spinning || total() === 0) return;
-    const stake = total();
-    const n = Math.floor(Math.random() * 37);
-    let payout = 0;
-    const winKeys = [];
-    for (const key in bets) {
-      const info = betInfo(key);
-      if (info.test(n)) { payout += bets[key] * info.mult; winKeys.push(key); }
+    function shuffle() {
+      deck = [];
+      SUITS.forEach(s => RANKS.forEach(r => deck.push({ r: r, s: s })));
+      for (let i = deck.length - 1; i > 0; i--) { const j = rnd(i + 1); const t = deck[i]; deck[i] = deck[j]; deck[j] = t; }
     }
-    pendingPayout = payout;
-    clearMarks();
-    setSpinning(true);
-    say("Ставок больше нет", "Шарик пошёл…");
-    $("#resNum").className = "res-num";
-    $("#resNum").textContent = "…";
+    function value(h) {
+      let v = 0, a = 0;
+      h.forEach(c => { if (c.r === "A") { a++; v += 11; } else if (c.r === "J" || c.r === "Q" || c.r === "K") v += 10; else v += +c.r; });
+      while (v > 21 && a) { v -= 10; a--; }
+      return v;
+    }
+    function cardHTML(c, back) {
+      if (back) return '<div class="pcard back"><span>•</span><span>•</span></div>';
+      const soft = (c.s === "♥" || c.s === "♦") ? " soft" : "";
+      return '<div class="pcard' + soft + '"><span>' + c.r + c.s + "</span><span>" + c.r + c.s + "</span></div>";
+    }
+    function paint() {
+      $("#bjPlayer").innerHTML = player.map(c => cardHTML(c, false)).join("");
+      $("#bjDealer").innerHTML = dealer.map((c, i) => cardHTML(c, hidden && i === 1)).join("");
+      $("#bjPlayerVal").textContent = player.length ? value(player) : "–";
+      $("#bjDealerVal").textContent = dealer.length ? (hidden ? value([dealer[0]]) + " + ?" : value(dealer)) : "–";
+    }
+    function buttons(on) {
+      live = on;
+      hitBtn.disabled = !on; standBtn.disabled = !on;
+      dblBtn.disabled = !on || player.length !== 2 || Bank.get() < stake;
+      dealBtn.disabled = on;
+    }
+    function settle(text, payout, good) {
+      hidden = false; paint(); buttons(false);
+      if (payout > 0) Bank.add(payout, true);
+      const net = payout - stake;
+      toast(out, text + " · " + (net > 0 ? "<b>+" + fmt(net) + "</b>" : net === 0 ? "ставка вернулась" : "−" + fmt(-net)) + " монет", good);
+      stake = 0;
+    }
+    dealBtn.onclick = () => {
+      const b = bet();
+      if (b < 10) { toast(out, "Минимальная ставка — 10 монет."); return; }
+      if (!Bank.take(b)) { toast(out, "Не хватает монет на эту ставку.", false); return; }
+      shuffle(); stake = b; hidden = true;
+      player = [deck.pop(), deck.pop()];
+      dealer = [deck.pop(), deck.pop()];
+      paint(); buttons(true);
+      const pbj = value(player) === 21, dbj = value(dealer) === 21;
+      if (pbj || dbj) {
+        if (pbj && dbj) settle("У обоих блэкджек", stake, null);
+        else if (pbj) settle("Блэкджек!", Math.round(stake * 2.5), true);
+        else settle("У дилера блэкджек", 0, false);
+        return;
+      }
+      toast(out, "Твой ход: «Ещё», «Хватит» или «Удвоить».");
+    };
+    hitBtn.onclick = () => {
+      if (!live) return;
+      player.push(deck.pop()); paint();
+      dblBtn.disabled = true;
+      const v = value(player);
+      if (v > 21) settle("Перебор — " + v, 0, false);
+      else if (v === 21) stand();
+    };
+    function stand() {
+      if (!live) return;
+      hidden = false;
+      while (value(dealer) < 17) dealer.push(deck.pop());
+      paint();
+      const p = value(player), d = value(dealer);
+      if (d > 21) settle("У дилера перебор — " + d, stake * 2, true);
+      else if (d > p) settle("Дилер сильнее: " + d + " против " + p, 0, false);
+      else if (d < p) settle("Ты сильнее: " + p + " против " + d, stake * 2, true);
+      else settle("Ничья " + p + ":" + d, stake, null);
+    }
+    standBtn.onclick = stand;
+    dblBtn.onclick = () => {
+      if (!live || player.length !== 2) return;
+      if (!Bank.take(stake)) { toast(out, "Не хватает монет, чтобы удвоить.", false); return; }
+      stake *= 2;
+      player.push(deck.pop()); paint();
+      const v = value(player);
+      if (v > 21) settle("Перебор после удвоения — " + v, 0, false);
+      else stand();
+    };
+    paint();
+  })();
 
-    await runSpin(n);
-    restNum = n;
-    wheelAngle = wheelAngle % 360;
+  /* =========================================================
+     ФОТОРЕДАКТОР
+     ========================================================= */
+  const Photo = (function () {
+    const stage = $("#stage");
+    let cv = document.createElement("canvas");
+    let original = null;
+    let hist = [];
+    let filters = { brightness: 100, contrast: 100, saturate: 100, grayscale: 0, sepia: 0, blur: 0, invert: 0, "hue-rotate": 0 };
+    const UNITS = { brightness: "%", contrast: "%", saturate: "%", grayscale: "%", sepia: "%", blur: "px", invert: "%", "hue-rotate": "deg" };
+    const DEF = Object.assign({}, filters);
 
-    winKeys.forEach(k => cells[k].classList.add("win"));
-    cells["n:" + n].classList.add("hit");
-    $("#pk-" + n).classList.add("hit");
+    stage.appendChild(cv);
 
-    lastBets = Object.assign({}, bets);
-    bets = {}; betLog = [];
-    setBalance(balance + payout, true);
-    pendingPayout = 0;
+    function filterString() {
+      return Object.keys(filters).map(k => k + "(" + filters[k] + UNITS[k] + ")").join(" ");
+    }
+    function clone(src) {
+      const c = document.createElement("canvas");
+      c.width = src.width; c.height = src.height;
+      c.getContext("2d").drawImage(src, 0, 0);
+      return c;
+    }
+    function pushHistory() { hist.push(clone(cv)); if (hist.length > 12) hist.shift(); }
+    function paint() {
+      cv.style.filter = filterString();
+      $("#sizeInfo").textContent = cv.width + " × " + cv.height + " px";
+      $("#pw").value = cv.width; $("#ph").value = cv.height;
+      $("#convSize").textContent = cv.width + " × " + cv.height;
+      $("#undoPhoto").disabled = !hist.length;
+    }
+    function setCanvas(c) { const p = cv.parentNode; p.replaceChild(c, cv); cv = c; cancelCrop(); paint(); }
 
-    const net = payout - stake;
-    const col = colorOf(n);
-    const num = $("#resNum");
-    num.textContent = n;
-    num.className = "res-num " + col;
-    void num.offsetWidth; num.classList.add("pop");
-
-    const colName = col === "green" ? "Зеро" : col === "red" ? "Красное" : "Чёрное";
-    const parity = n === 0 ? "" : n % 2 === 0 ? ", чётное" : ", нечётное";
-    if (net > 0) {
-      say(colName + parity, `Выигрыш +${fmt(net)} монет`, "plus");
-      const f = document.createElement("div");
-      f.className = "float"; f.textContent = "+" + fmt(net);
-      $(".plate").appendChild(f);
-      setTimeout(() => f.remove(), 1900);
-    } else if (net === 0) {
-      say(colName + parity, "Ставки вернулись, баланс без изменений");
-    } else {
-      say(colName + parity, `Проигрыш −${fmt(-net)} монет`, "minus");
+    function load(file) {
+      if (!file || !/^image\//.test(file.type)) { toast($("#convOut"), "Это не похоже на картинку.", false); return; }
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement("canvas");
+        c.width = img.naturalWidth; c.height = img.naturalHeight;
+        c.getContext("2d").drawImage(img, 0, 0);
+        URL.revokeObjectURL(url);
+        hist = []; original = clone(c);
+        resetFilters();
+        setCanvas(c);
+        $("#dropCard").hidden = true;
+        $("#editorUI").hidden = false;
+        $("#convHint").textContent = "Фото загружено. Выбери формат и качество.";
+        const name = file.name.replace(/\.[^.]+$/, "");
+        if (name) $("#fname").value = name.slice(0, 40);
+        toast($("#convOut"), "");
+      };
+      img.onerror = () => toast($("#convOut"), "Не удалось открыть файл.", false);
+      img.src = url;
     }
 
-    history.unshift(n);
-    history = history.slice(0, 14);
-    renderHistory();
+    function resetFilters() {
+      filters = Object.assign({}, DEF);
+      $$("[data-f]").forEach(r => { r.value = DEF[r.dataset.f]; r.nextElementSibling.value = DEF[r.dataset.f]; });
+      cv.style.filter = "none";
+    }
 
-    setSpinning(false);
-    if (balance < 10) say("Монеты закончились", "Нажми «Сбросить», чтобы начать заново.");
-  }
-  spinBtn.onclick = spin;
+    /* --- операции --- */
+    function resize(w, h) {
+      w = clamp(Math.round(w), 1, 12000); h = clamp(Math.round(h), 1, 12000);
+      pushHistory();
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      const x = c.getContext("2d");
+      x.imageSmoothingQuality = "high";
+      x.drawImage(cv, 0, 0, w, h);
+      setCanvas(c);
+    }
+    function rotate(deg) {
+      pushHistory();
+      const c = document.createElement("canvas");
+      const swap = deg % 180 !== 0;
+      c.width = swap ? cv.height : cv.width;
+      c.height = swap ? cv.width : cv.height;
+      const x = c.getContext("2d");
+      x.translate(c.width / 2, c.height / 2);
+      x.rotate(deg * Math.PI / 180);
+      x.drawImage(cv, -cv.width / 2, -cv.height / 2);
+      setCanvas(c);
+    }
+    function flip(dir) {
+      pushHistory();
+      const c = document.createElement("canvas");
+      c.width = cv.width; c.height = cv.height;
+      const x = c.getContext("2d");
+      x.translate(dir === "h" ? c.width : 0, dir === "v" ? c.height : 0);
+      x.scale(dir === "h" ? -1 : 1, dir === "v" ? -1 : 1);
+      x.drawImage(cv, 0, 0);
+      setCanvas(c);
+    }
+    function crop(x0, y0, w, h) {
+      x0 = clamp(Math.round(x0), 0, cv.width - 1); y0 = clamp(Math.round(y0), 0, cv.height - 1);
+      w = clamp(Math.round(w), 1, cv.width - x0); h = clamp(Math.round(h), 1, cv.height - y0);
+      pushHistory();
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      c.getContext("2d").drawImage(cv, x0, y0, w, h, 0, 0, w, h);
+      setCanvas(c);
+    }
+    function bakeFilters() {
+      pushHistory();
+      const c = document.createElement("canvas");
+      c.width = cv.width; c.height = cv.height;
+      const x = c.getContext("2d");
+      x.filter = filterString();
+      x.drawImage(cv, 0, 0);
+      resetFilters();
+      setCanvas(c);
+    }
+    function undo() { if (!hist.length) return; setCanvas(hist.pop()); }
+    function restore() { if (!original) return; pushHistory(); resetFilters(); setCanvas(clone(original)); }
 
-  // restore saved state
-  balEl.textContent = fmt(balance);
-  document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(+c.dataset.v === chip)));
-  if (history.length) {
-    restNum = history[0];
-    ballAbs = angleOf(restNum);
-    renderHistory();
-    const num = $("#resNum");
-    num.textContent = restNum;
-    num.className = "res-num " + colorOf(restNum);
-    say("С возвращением", "Баланс сохранён. Делай ставки.");
-  }
-  if (balance < 10) say("Монеты закончились", "Нажми «Сбросить», чтобы начать заново.");
-  window.addEventListener("pagehide", save);
-  document.addEventListener("visibilitychange", () => { if (document.hidden) save(); });
+    /* --- обрезка мышью --- */
+    let box = null, cropOn = false, drag = null;
+    const scale = () => cv.clientWidth / cv.width || 1;
+    function makeBox(l, t, w, h) {
+      if (!box) {
+        box = document.createElement("div");
+        box.className = "crop-box";
+        box.innerHTML = '<i class="tl"></i><i class="br"></i>';
+        stage.appendChild(box);
+      }
+      box.style.left = l + "px"; box.style.top = t + "px";
+      box.style.width = w + "px"; box.style.height = h + "px";
+      $("#cropApply").disabled = false; $("#cropCancel").disabled = false;
+      info();
+    }
+    function info() {
+      if (!box) { $("#cropInfo").textContent = "Изменения применяются к картинке сразу."; return; }
+      const s = scale();
+      $("#cropInfo").textContent = "Выделено " + Math.round(parseFloat(box.style.width) / s) + " × " + Math.round(parseFloat(box.style.height) / s) + " px";
+    }
+    function cancelCrop() {
+      cropOn = false; drag = null;
+      if (box) { box.remove(); box = null; }
+      $("#cropApply").disabled = true; $("#cropCancel").disabled = true;
+      $("#cropMode").textContent = "Выделить область";
+      info();
+    }
+    function enableCrop() {
+      cropOn = true;
+      $("#cropMode").textContent = "Выделение включено";
+      const w = cv.clientWidth, h = cv.clientHeight;
+      makeBox(w * 0.15, h * 0.15, w * 0.7, h * 0.7);
+    }
+    function ratioBox(r) {
+      cropOn = true;
+      $("#cropMode").textContent = "Выделение включено";
+      const w = cv.clientWidth, h = cv.clientHeight;
+      let bw = w, bh = w / r;
+      if (bh > h) { bh = h; bw = h * r; }
+      makeBox((w - bw) / 2, (h - bh) / 2, bw, bh);
+    }
+    stage.addEventListener("pointerdown", e => {
+      if (!cropOn) return;
+      const rect = stage.getBoundingClientRect();
+      const px = e.clientX - rect.left, py = e.clientY - rect.top;
+      const cls = e.target.className;
+      if (box && (cls === "br" || cls === "tl")) drag = { mode: cls, px: px, py: py, l: parseFloat(box.style.left), t: parseFloat(box.style.top), w: parseFloat(box.style.width), h: parseFloat(box.style.height) };
+      else if (box && e.target === box) drag = { mode: "move", px: px, py: py, l: parseFloat(box.style.left), t: parseFloat(box.style.top), w: parseFloat(box.style.width), h: parseFloat(box.style.height) };
+      else { drag = { mode: "new", px: px, py: py }; makeBox(px, py, 1, 1); }
+      stage.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+    stage.addEventListener("pointermove", e => {
+      if (!drag || !box) return;
+      const rect = stage.getBoundingClientRect();
+      const px = clamp(e.clientX - rect.left, 0, cv.clientWidth), py = clamp(e.clientY - rect.top, 0, cv.clientHeight);
+      const dx = px - drag.px, dy = py - drag.py;
+      if (drag.mode === "new") makeBox(Math.min(drag.px, px), Math.min(drag.py, py), Math.abs(dx), Math.abs(dy));
+      else if (drag.mode === "move") makeBox(clamp(drag.l + dx, 0, cv.clientWidth - drag.w), clamp(drag.t + dy, 0, cv.clientHeight - drag.h), drag.w, drag.h);
+      else if (drag.mode === "br") makeBox(drag.l, drag.t, clamp(drag.w + dx, 10, cv.clientWidth - drag.l), clamp(drag.h + dy, 10, cv.clientHeight - drag.t));
+      else if (drag.mode === "tl") {
+        const nl = clamp(drag.l + dx, 0, drag.l + drag.w - 10), nt = clamp(drag.t + dy, 0, drag.t + drag.h - 10);
+        makeBox(nl, nt, drag.w + (drag.l - nl), drag.h + (drag.t - nt));
+      }
+    });
+    stage.addEventListener("pointerup", () => { drag = null; });
 
-  renderBets();
-  render();
+    $("#cropMode").onclick = () => cropOn ? cancelCrop() : enableCrop();
+    $("#cropCancel").onclick = cancelCrop;
+    $("#cropApply").onclick = () => {
+      if (!box) return;
+      const s = scale();
+      crop(parseFloat(box.style.left) / s, parseFloat(box.style.top) / s, parseFloat(box.style.width) / s, parseFloat(box.style.height) / s);
+    };
+    $$("[data-ratio]").forEach(b => b.onclick = () => ratioBox(+b.dataset.ratio));
+
+    /* --- размер --- */
+    let ratioLock = true;
+    $("#lockRatio").onchange = e => ratioLock = e.target.checked;
+    $("#pw").oninput = () => { if (ratioLock) $("#ph").value = Math.max(1, Math.round(+$("#pw").value * cv.height / cv.width)); };
+    $("#ph").oninput = () => { if (ratioLock) $("#pw").value = Math.max(1, Math.round(+$("#ph").value * cv.width / cv.height)); };
+    $("#applySize").onclick = () => resize(+$("#pw").value, +$("#ph").value);
+    $$("[data-scale]").forEach(b => b.onclick = () => { const k = +b.dataset.scale; resize(cv.width * k, cv.height * k); });
+    $$("[data-fit]").forEach(b => b.onclick = () => {
+      const m = +b.dataset.fit, k = m / Math.max(cv.width, cv.height);
+      if (k < 1) resize(cv.width * k, cv.height * k); else toast($("#convOut"), "Фото уже меньше " + m + " px по длинной стороне.");
+    });
+    $$("[data-rot]").forEach(b => b.onclick = () => rotate(+b.dataset.rot));
+    $$("[data-flip]").forEach(b => b.onclick = () => flip(b.dataset.flip));
+    $("#undoPhoto").onclick = undo;
+    $("#resetPhoto").onclick = restore;
+    $("#newPhoto").onclick = () => { $("#dropCard").hidden = false; $("#editorUI").hidden = true; $("#file").value = ""; };
+
+    /* --- фильтры --- */
+    $$("[data-f]").forEach(r => r.oninput = () => {
+      filters[r.dataset.f] = +r.value;
+      r.nextElementSibling.value = r.value;
+      cv.style.filter = filterString();
+    });
+    $("#applyFilters").onclick = bakeFilters;
+    $("#resetFilters").onclick = resetFilters;
+
+    /* --- загрузка файла --- */
+    const drop = $("#drop");
+    $("#pickBtn").onclick = () => $("#file").click();
+    $("#file").onchange = e => load(e.target.files[0]);
+    drop.addEventListener("click", e => { if (e.target === drop) $("#file").click(); });
+    ["dragenter", "dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+    ["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+    drop.addEventListener("drop", e => { if (e.dataTransfer.files[0]) load(e.dataTransfer.files[0]); });
+    window.addEventListener("paste", e => {
+      const items = e.clipboardData && e.clipboardData.files;
+      if (items && items[0] && /^image\//.test(items[0].type)) load(items[0]);
+    });
+
+    return {
+      has: () => !!original,
+      canvas: () => cv,
+      filterString: filterString,
+      hasFilters: () => filterString() !== Object.keys(DEF).map(k => k + "(" + DEF[k] + UNITS[k] + ")").join(" ")
+    };
+  })();
+
+  /* --- формат, вес, скачивание --- */
+  (function convert() {
+    const q = $("#quality");
+    q.oninput = () => q.nextElementSibling.value = q.value;
+    function blobOf() {
+      return new Promise(resolve => {
+        const src = Photo.canvas();
+        const c = document.createElement("canvas");
+        c.width = src.width; c.height = src.height;
+        const x = c.getContext("2d");
+        if ($("#fmt").value === "image/jpeg") { x.fillStyle = "#ffffff"; x.fillRect(0, 0, c.width, c.height); }
+        x.filter = Photo.filterString();
+        x.drawImage(src, 0, 0);
+        c.toBlob(resolve, $("#fmt").value, (+q.value) / 100);
+      });
+    }
+    const human = b => b > 1048576 ? (b / 1048576).toFixed(2) + " МБ" : (b / 1024).toFixed(0) + " КБ";
+    $("#estimate").onclick = async () => {
+      if (!Photo.has()) { toast($("#convOut"), "Сначала загрузи фото во вкладке «Редактор».", false); return; }
+      const b = await blobOf();
+      $("#convWeight").textContent = b ? human(b.size) : "—";
+      toast($("#convOut"), "Пересчитано для текущих настроек.");
+    };
+    $("#download").onclick = async () => {
+      if (!Photo.has()) { toast($("#convOut"), "Сначала загрузи фото во вкладке «Редактор».", false); return; }
+      const b = await blobOf();
+      if (!b) { toast($("#convOut"), "Браузер не смог сохранить в этом формате.", false); return; }
+      $("#convWeight").textContent = human(b.size);
+      const ext = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp" }[$("#fmt").value];
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(b);
+      a.download = (($("#fname").value || "photo").replace(/[\\/:*?"<>|]/g, "") || "photo") + "." + ext;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+      toast($("#convOut"), "Файл сохранён: " + a.download + " · " + human(b.size), true);
+    };
+    $("#copyImg").onclick = async () => {
+      if (!Photo.has()) { toast($("#convOut"), "Сначала загрузи фото во вкладке «Редактор».", false); return; }
+      try {
+        const src = Photo.canvas();
+        const c = document.createElement("canvas");
+        c.width = src.width; c.height = src.height;
+        const x = c.getContext("2d"); x.filter = Photo.filterString(); x.drawImage(src, 0, 0);
+        const blob = await new Promise(r => c.toBlob(r, "image/png"));
+        await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+        toast($("#convOut"), "Фото в буфере обмена.", true);
+      } catch (e) { toast($("#convOut"), "Браузер не дал скопировать картинку — скачай файл.", false); }
+    };
+  })();
+
+  /* =========================================================
+     ТЕСТ РЕАКЦИИ
+     ========================================================= */
+  (function reaction() {
+    const arena = $("#rcArena");
+    let state = "idle", t0 = 0, timer = 0, tries = [], best = store.get("rcBest", null);
+    $("#rcBest").textContent = best ? best + " мс" : "—";
+
+    function screen(cls, big, small) {
+      arena.className = "arena " + (cls || "");
+      arena.innerHTML = "<div><b>" + big + "</b><small>" + small + "</small></div>";
+    }
+    function stats() {
+      $("#rcTry").textContent = tries.length + "/5";
+      if (tries.length) {
+        $("#rcLast").textContent = tries[tries.length - 1] + " мс";
+        $("#rcAvg").textContent = Math.round(tries.reduce((a, b) => a + b, 0) / tries.length) + " мс";
+      } else { $("#rcLast").textContent = "—"; $("#rcAvg").textContent = "—"; }
+    }
+    function arm() {
+      state = "wait";
+      screen("wait", "Жди…", "Кликнешь раньше времени — попытка не в счёт");
+      timer = setTimeout(() => {
+        state = "go"; t0 = performance.now();
+        screen("go", "Клик!", "Как можно быстрее");
+      }, 1000 + Math.random() * 4000);
+    }
+    arena.onclick = () => {
+      if (state === "idle") { arm(); return; }
+      if (state === "wait") {
+        clearTimeout(timer); state = "idle";
+        screen("early", "Рано", "Нажми ещё раз, чтобы повторить попытку");
+        return;
+      }
+      if (state === "go") {
+        const ms = Math.round(performance.now() - t0);
+        tries.push(ms); stats();
+        if (!best || ms < best) { best = ms; store.set("rcBest", best); $("#rcBest").textContent = best + " мс"; }
+        if (tries.length >= 5) {
+          const avg = Math.round(tries.reduce((a, b) => a + b, 0) / tries.length);
+          state = "idle"; tries = [];
+          screen("", avg + " мс в среднем", "Серия завершена. Клик — новая серия");
+          $("#rcTry").textContent = "0/5";
+          return;
+        }
+        state = "idle";
+        screen("", ms + " мс", "Клик — следующая попытка (" + tries.length + "/5)");
+        return;
+      }
+    };
+    arena.onkeydown = e => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); arena.click(); } };
+    $("#rcReset").onclick = () => { clearTimeout(timer); state = "idle"; tries = []; stats(); screen("", "Нажми, чтобы начать", "Поле станет светлым через 1–5 секунд"); };
+    stats();
+  })();
+
+  /* =========================================================
+     ТЕСТ КПС
+     ========================================================= */
+  (function cps() {
+    const arena = $("#cpsArena");
+    let hits = 0, running = false, endAt = 0, raf = 0;
+    let best = store.get("cpsBest", null);
+    $("#cpsBest").textContent = best ? best.toFixed(2) + " кпс" : "—";
+
+    function paint(left) {
+      $("#cpsHits").textContent = hits;
+      $("#cpsLeft").textContent = left === null ? "—" : left.toFixed(1) + " с";
+    }
+    arena.onclick = () => {
+      const dur = +$("#cpsDur").value;
+      if (!running) {
+        running = true; hits = 1; endAt = performance.now() + dur * 1000;
+        arena.className = "arena go";
+        arena.innerHTML = "<div><b>Кликай!</b><small>Не останавливайся</small></div>";
+        (function tick() {
+          const left = (endAt - performance.now()) / 1000;
+          if (left <= 0) { finish(dur); return; }
+          paint(left);
+          $("#cpsRate").textContent = (hits / (dur - left)).toFixed(2);
+          raf = requestAnimationFrame(tick);
+        })();
+        return;
+      }
+      hits++;
+      $("#cpsHits").textContent = hits;
+    };
+    function finish(dur) {
+      cancelAnimationFrame(raf);
+      running = false;
+      const rate = hits / dur;
+      $("#cpsRate").textContent = rate.toFixed(2);
+      paint(0);
+      if (!best || rate > best) { best = rate; store.set("cpsBest", best); $("#cpsBest").textContent = best.toFixed(2) + " кпс"; }
+      arena.className = "arena";
+      arena.innerHTML = "<div><b>" + rate.toFixed(2) + " кликов в секунду</b><small>" + hits + " кликов за " + dur + " с · клик — заново</small></div>";
+    }
+    arena.onkeydown = e => { if (e.key === " ") { e.preventDefault(); arena.click(); } };
+  })();
+
+  /* =========================================================
+     ТОЧНОСТЬ МЫШИ
+     ========================================================= */
+  (function aim() {
+    const arena = $("#aimArena");
+    let live = false, hit = 0, miss = 0, times = [], shownAt = 0, endAt = 0, tick = 0, target = null;
+
+    function place() {
+      const size = +$("#aimSize").value;
+      if (target) target.remove();
+      target = document.createElement("div");
+      target.className = "target";
+      target.style.width = target.style.height = size + "px";
+      target.style.left = (Math.random() * (arena.clientWidth - size)) + "px";
+      target.style.top = (Math.random() * (arena.clientHeight - size)) + "px";
+      target.onclick = e => {
+        e.stopPropagation();
+        if (!live) return;
+        hit++; times.push(performance.now() - shownAt);
+        paint(); place();
+      };
+      arena.appendChild(target);
+      shownAt = performance.now();
+    }
+    function paint() {
+      $("#aimHit").textContent = hit;
+      $("#aimMiss").textContent = miss;
+      const tot = hit + miss;
+      $("#aimAcc").textContent = tot ? Math.round(hit / tot * 100) + "%" : "—";
+      $("#aimSpeed").textContent = times.length ? Math.round(times.reduce((a, b) => a + b, 0) / times.length) + " мс" : "—";
+    }
+    arena.addEventListener("click", () => { if (live) { miss++; paint(); } });
+    $("#aimStart").onclick = () => {
+      if (live) return;
+      live = true; hit = 0; miss = 0; times = []; paint();
+      arena.innerHTML = "";
+      endAt = performance.now() + 30000;
+      place();
+      $("#aimStart").disabled = true;
+      tick = setInterval(() => {
+        if (performance.now() >= endAt) {
+          clearInterval(tick); live = false;
+          if (target) target.remove();
+          $("#aimStart").disabled = false;
+          const acc = hit + miss ? Math.round(hit / (hit + miss) * 100) : 0;
+          arena.innerHTML = "<div><b>" + hit + " попаданий, " + acc + "%</b><small>Средний отклик " + (times.length ? Math.round(times.reduce((a, b) => a + b, 0) / times.length) : 0) + " мс · «Начать» — ещё раз</small></div>";
+        }
+      }, 200);
+    };
+  })();
+
+  /* =========================================================
+     СКОРОСТЬ ПЕЧАТИ
+     ========================================================= */
+  (function typing() {
+    const TEXTS = [
+      "Тихий вечер опустился на город, и фонари зажглись один за другим вдоль пустой набережной.",
+      "Хороший код читается как понятный текст: короткие функции, честные имена и никакой лишней магии.",
+      "Кофе давно остыл, но работа шла легко, потому что задача наконец сложилась в голове целиком.",
+      "Если долго смотреть на график, можно увидеть закономерность, которой там на самом деле нет.",
+      "Снег падал крупными хлопьями, и двор за окном медленно превращался в чистый белый лист."
+    ];
+    const textEl = $("#typeText"), input = $("#typeInput");
+    let target = "", start = 0, timer = 0;
+    let best = store.get("tpBest", null);
+    $("#tpBest").textContent = best ? best + " зн/мин" : "—";
+
+    function newText() {
+      target = TEXTS[rnd(TEXTS.length)];
+      input.value = ""; start = 0; clearInterval(timer);
+      $("#tpCpm").textContent = "0"; $("#tpWpm").textContent = "0"; $("#tpAcc").textContent = "100%"; $("#tpTime").textContent = "0.0 с";
+      render();
+    }
+    function render() {
+      const v = input.value;
+      let html = "";
+      for (let i = 0; i < target.length; i++) {
+        const ch = target[i] === " " ? "&nbsp;" : target[i].replace("<", "&lt;");
+        if (i < v.length) html += '<span class="' + (v[i] === target[i] ? "ok" : "bad") + '">' + ch + "</span>";
+        else html += '<span class="rest' + (i === v.length ? " cur" : "") + '">' + ch + "</span>";
+      }
+      textEl.innerHTML = html;
+    }
+    function stats(done) {
+      const v = input.value;
+      const sec = (performance.now() - start) / 1000;
+      let ok = 0;
+      for (let i = 0; i < v.length; i++) if (v[i] === target[i]) ok++;
+      const cpm = sec > 0 ? Math.round(ok / sec * 60) : 0;
+      $("#tpCpm").textContent = cpm;
+      $("#tpWpm").textContent = Math.round(cpm / 5);
+      $("#tpAcc").textContent = v.length ? Math.round(ok / v.length * 100) + "%" : "100%";
+      $("#tpTime").textContent = sec.toFixed(1) + " с";
+      if (done && (!best || cpm > best)) { best = cpm; store.set("tpBest", best); $("#tpBest").textContent = best + " зн/мин"; }
+    }
+    input.oninput = () => {
+      if (!start) { start = performance.now(); timer = setInterval(() => stats(false), 200); }
+      render();
+      if (input.value.length >= target.length) { clearInterval(timer); stats(true); input.blur(); }
+      else stats(false);
+    };
+    $("#tpNew").onclick = newText;
+    newText();
+  })();
+
+  /* =========================================================
+     ПАМЯТЬ НА ЧИСЛА
+     ========================================================= */
+  (function memory() {
+    const seqEl = $("#memSeq"), input = $("#memInput"), out = $("#memOut");
+    let level = 1, len = 3, code = "", best = store.get("memBest", null);
+    $("#memBest").textContent = best ? best + " знаков" : "—";
+
+    function show() {
+      code = "";
+      for (let i = 0; i < len; i++) code += rnd(10);
+      seqEl.textContent = code;
+      input.disabled = true; input.value = "";
+      $("#memLevel").textContent = level; $("#memLen").textContent = len;
+      toast(out, "Запоминай…");
+      setTimeout(() => {
+        seqEl.textContent = "?";
+        input.disabled = false; input.focus();
+        toast(out, "Введи число и нажми Enter.");
+      }, 900 + len * 250);
+    }
+    $("#memStart").onclick = () => { level = 1; len = 3; show(); };
+    input.onkeydown = e => {
+      if (e.key !== "Enter") return;
+      if (input.value.trim() === code) {
+        level++; len++;
+        if (!best || len - 1 > best) { best = len - 1; store.set("memBest", best); $("#memBest").textContent = best + " знаков"; }
+        toast(out, "Верно. Дальше — " + len + " знаков.", true);
+        setTimeout(show, 600);
+      } else {
+        input.disabled = true;
+        seqEl.textContent = code;
+        toast(out, "Было " + code + ". Дошёл до уровня " + level + ". Нажми «Начать» для новой попытки.", false);
+      }
+    };
+  })();
+
+  /* =========================================================
+     ГЕНЕРАТОР ПАРОЛЕЙ
+     ========================================================= */
+  (function passwords() {
+    const UP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ", LOW = "abcdefghijklmnopqrstuvwxyz", NUM = "0123456789", SYM = "!@#$%^&*()-_=+[]{}<>?,.";
+    const len = $("#pwLen");
+    len.oninput = () => len.nextElementSibling.value = len.value;
+
+    function pool() {
+      let p = "";
+      if ($("#pwUp").checked) p += UP;
+      if ($("#pwLow").checked) p += LOW;
+      if ($("#pwNum").checked) p += NUM;
+      if ($("#pwSym").checked) p += SYM;
+      if ($("#pwNoSim").checked) p = p.replace(/[0O1lI]/g, "");
+      return p;
+    }
+    function make() {
+      const p = pool();
+      if (!p) return "";
+      const n = +len.value;
+      const buf = new Uint32Array(n);
+      crypto.getRandomValues(buf);
+      let s = "";
+      for (let i = 0; i < n; i++) s += p[buf[i] % p.length];
+      return s;
+    }
+    function gen() {
+      const s = make();
+      if (!s) { $("#pwOut").value = ""; toast($("#pwStrength"), "выбери набор"); return; }
+      $("#pwOut").value = s;
+      const bits = Math.round(s.length * Math.log2(pool().length));
+      $("#pwBits").textContent = bits + " бит";
+      $("#pwStrength").textContent = bits < 40 ? "слабый" : bits < 60 ? "средний" : bits < 90 ? "хороший" : "очень стойкий";
+    }
+    $("#pwGen").onclick = gen;
+    $("#pwCopy").onclick = e => { if ($("#pwOut").value) copy($("#pwOut").value, e.target); };
+    $("#pwBatch").onclick = () => {
+      const n = clamp(+$("#pwCount").value || 5, 1, 50);
+      const list = [];
+      for (let i = 0; i < n; i++) list.push(make());
+      $("#pwList").value = list.join("\n");
+    };
+    gen();
+  })();
+
+  /* =========================================================
+     КОНВЕРТЕР ВЕЛИЧИН
+     ========================================================= */
+  (function units() {
+    const CATS = {
+      "Длина": { м: 1, км: 1000, см: 0.01, мм: 0.001, миля: 1609.344, ярд: 0.9144, фут: 0.3048, дюйм: 0.0254, "морская миля": 1852 },
+      "Масса": { кг: 1, г: 0.001, "т": 1000, мг: 1e-6, фунт: 0.45359237, унция: 0.028349523 },
+      "Объём": { "л": 1, "мл": 0.001, "м³": 1000, "галлон US": 3.785411784, "пинта US": 0.473176473, "чашка": 0.24 },
+      "Данные": { "МБ": 1, "КБ": 1 / 1024, "Б": 1 / 1048576, "ГБ": 1024, "ТБ": 1048576 },
+      "Скорость": { "км/ч": 1, "м/с": 3.6, "миль/ч": 1.609344, "узел": 1.852 },
+      "Время": { "с": 1, "мин": 60, "ч": 3600, "сутки": 86400, "неделя": 604800, "мс": 0.001 },
+      "Площадь": { "м²": 1, "км²": 1e6, "га": 10000, "сотка": 100, "фут²": 0.09290304 },
+      "Температура": { "°C": 1, "°F": 1, "K": 1 }
+    };
+    const cat = $("#uCat"), from = $("#uFrom"), to = $("#uTo"), val = $("#uVal");
+    cat.innerHTML = Object.keys(CATS).map(k => "<option>" + k + "</option>").join("");
+    function fillUnits() {
+      const u = Object.keys(CATS[cat.value]);
+      from.innerHTML = u.map(k => "<option>" + k + "</option>").join("");
+      to.innerHTML = u.map(k => "<option>" + k + "</option>").join("");
+      to.selectedIndex = Math.min(1, u.length - 1);
+      calc();
+    }
+    function temp(v, f, t) {
+      let c = f === "°C" ? v : f === "°F" ? (v - 32) * 5 / 9 : v - 273.15;
+      return t === "°C" ? c : t === "°F" ? c * 9 / 5 + 32 : c + 273.15;
+    }
+    function calc() {
+      const v = +val.value;
+      if (!Number.isFinite(v)) { $("#uOut").textContent = "—"; return; }
+      let r;
+      if (cat.value === "Температура") r = temp(v, from.value, to.value);
+      else r = v * CATS[cat.value][from.value] / CATS[cat.value][to.value];
+      const txt = Math.abs(r) >= 1e9 || (Math.abs(r) < 1e-4 && r !== 0) ? r.toExponential(4) : (Math.round(r * 1e6) / 1e6).toLocaleString("ru-RU");
+      $("#uOut").textContent = txt + " " + to.value;
+    }
+    cat.onchange = fillUnits;
+    [from, to, val].forEach(el => el.oninput = calc);
+    [from, to].forEach(el => el.onchange = calc);
+    fillUnits();
+  })();
+
+  /* =========================================================
+     АНАЛИЗ ТЕКСТА
+     ========================================================= */
+  (function textTools() {
+    const ta = $("#txt");
+    function stats() {
+      const v = ta.value;
+      const words = v.trim() ? v.trim().split(/\s+/).length : 0;
+      $("#tChars").textContent = v.length;
+      $("#tNoSp").textContent = v.replace(/\s/g, "").length;
+      $("#tWords").textContent = words;
+      $("#tLines").textContent = v ? v.split(/\n/).length : 0;
+      $("#tSent").textContent = v.trim() ? (v.match(/[^.!?…]+[.!?…]+/g) || [v]).length : 0;
+      const sec = Math.round(words / 200 * 60);
+      $("#tRead").textContent = sec < 60 ? sec + " с" : Math.floor(sec / 60) + " мин " + (sec % 60) + " с";
+    }
+    const MAP = { а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"ts",ч:"ch",ш:"sh",щ:"sch",ъ:"",ы:"y",ь:"",э:"e",ю:"yu",я:"ya" };
+    const TX = {
+      upper: s => s.toUpperCase(),
+      lower: s => s.toLowerCase(),
+      title: s => s.replace(/(^|\s)(\S)/g, (m, a, b) => a + b.toUpperCase()),
+      sentence: s => s.toLowerCase().replace(/(^\s*|[.!?…]\s+)(\S)/g, (m, a, b) => a + b.toUpperCase()),
+      trim: s => s.replace(/[ \t]+/g, " ").replace(/ *\n */g, "\n").trim(),
+      nolines: s => s.replace(/\s*\n+\s*/g, " ").trim(),
+      reverse: s => s.split("").reverse().join(""),
+      sort: s => s.split("\n").sort((a, b) => a.localeCompare(b, "ru")).join("\n"),
+      uniq: s => s.split("\n").filter((l, i, arr) => arr.indexOf(l) === i).join("\n"),
+      translit: s => s.split("").map(ch => {
+        const low = ch.toLowerCase(), t = MAP[low];
+        if (t === undefined) return ch;
+        return ch === low ? t : t.charAt(0).toUpperCase() + t.slice(1);
+      }).join("")
+    };
+    ta.oninput = stats;
+    $$("[data-tx]").forEach(b => b.onclick = () => {
+      const a = b.dataset.tx;
+      if (a === "clear") ta.value = "";
+      else if (a === "copy") { copy(ta.value, b); return; }
+      else ta.value = TX[a](ta.value);
+      stats();
+    });
+    stats();
+  })();
+
+  /* =========================================================
+     РАНДОМАЙЗЕР
+     ========================================================= */
+  (function randomizer() {
+    $("#rNum").onclick = () => {
+      const a = Math.ceil(+$("#rMin").value || 0), b = Math.floor(+$("#rMax").value || 0);
+      const lo = Math.min(a, b), hi = Math.max(a, b);
+      $("#rNumOut").textContent = (lo + rnd(hi - lo + 1)).toLocaleString("ru-RU");
+    };
+    $("#rCoin").onclick = () => $("#rCoinOut").textContent = Math.random() < 0.5 ? "Орёл" : "Решка";
+    $$("[data-dice]").forEach(b => b.onclick = () => $("#rCoinOut").textContent = (1 + rnd(+b.dataset.dice)) + "");
+    const lines = () => $("#rList").value.split("\n").map(s => s.trim()).filter(Boolean);
+    $("#rPick").onclick = () => {
+      const l = lines();
+      if (!l.length) { toast($("#rListOut"), "Сначала добавь варианты — по одному на строку."); return; }
+      toast($("#rListOut"), "Выпало: <b>" + l[rnd(l.length)] + "</b>", true);
+    };
+    $("#rShuffle").onclick = () => {
+      const l = lines();
+      for (let i = l.length - 1; i > 0; i--) { const j = rnd(i + 1); const t = l[i]; l[i] = l[j]; l[j] = t; }
+      $("#rList").value = l.join("\n");
+      toast($("#rListOut"), "Список перемешан.");
+    };
+  })();
+
+  /* =========================================================
+     ЦВЕТА
+     ========================================================= */
+  (function colors() {
+    const pick = $("#cPick"), hexIn = $("#cHex");
+    const hex2rgb = h => { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; };
+    const rgb2hex = (r, g, b) => "#" + [r, g, b].map(v => clamp(Math.round(v), 0, 255).toString(16).padStart(2, "0")).join("").toUpperCase();
+    function rgb2hsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2;
+      let h = 0, s = 0;
+      if (mx !== mn) {
+        const d = mx - mn;
+        s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn);
+        h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+        h *= 60;
+      }
+      return [Math.round(h), Math.round(s * 100), Math.round(l * 100)];
+    }
+    function hsl2hex(h, s, l) {
+      s /= 100; l /= 100;
+      const k = n => (n + h / 30) % 12;
+      const a = s * Math.min(l, 1 - l);
+      const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+      return rgb2hex(f(0) * 255, f(8) * 255, f(4) * 255);
+    }
+    function tile(hex, box) {
+      const d = document.createElement("div");
+      d.className = "swatch"; d.style.background = hex;
+      d.style.color = rgb2hsl.apply(null, hex2rgb(hex))[2] > 55 ? "#111" : "#eee";
+      d.textContent = hex;
+      d.onclick = () => copy(hex, null);
+      box.appendChild(d);
+    }
+    function paint(hex) {
+      hex = hex.toUpperCase();
+      pick.value = hex; hexIn.value = hex;
+      const rgb = hex2rgb(hex), hsl = rgb2hsl.apply(null, rgb);
+      $("#cRgb").textContent = "rgb(" + rgb.join(", ") + ")";
+      $("#cHsl").textContent = "hsl(" + hsl[0] + ", " + hsl[1] + "%, " + hsl[2] + "%)";
+      const shades = $("#cShades"), harm = $("#cHarmony");
+      shades.innerHTML = ""; harm.innerHTML = "";
+      [10, 25, 40, 55, 70, 85].forEach(l => tile(hsl2hex(hsl[0], hsl[1], l), shades));
+      [[hsl[0] + 180, "доп."], [hsl[0] + 120, ""], [hsl[0] + 240, ""], [hsl[0] + 30, ""], [hsl[0] - 30, ""]]
+        .forEach(p => tile(hsl2hex((p[0] + 360) % 360, hsl[1], hsl[2]), harm));
+    }
+    pick.oninput = () => paint(pick.value);
+    hexIn.oninput = () => { if (/^#[0-9a-f]{6}$/i.test(hexIn.value)) paint(hexIn.value); };
+    $("#cRandom").onclick = () => paint(rgb2hex(rnd(256), rnd(256), rnd(256)));
+    paint("#6B6B6B");
+  })();
+
+  /* =========================================================
+     СЕКУНДОМЕР И ТАЙМЕР
+     ========================================================= */
+  (function timers() {
+    /* секундомер */
+    let swRun = false, swStart = 0, swAcc = 0, swRaf = 0, laps = [];
+    const swFmt = ms => {
+      const m = Math.floor(ms / 60000), s = Math.floor(ms % 60000 / 1000), c = Math.floor(ms % 1000 / 10);
+      return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0") + "." + String(c).padStart(2, "0");
+    };
+    const swNow = () => swAcc + (swRun ? performance.now() - swStart : 0);
+    function swTick() { $("#swTime").textContent = swFmt(swNow()); if (swRun) swRaf = requestAnimationFrame(swTick); }
+    $("#swStart").onclick = () => {
+      if (swRun) { swAcc = swNow(); swRun = false; cancelAnimationFrame(swRaf); $("#swStart").textContent = "Продолжить"; $("#swLap").disabled = true; }
+      else { swRun = true; swStart = performance.now(); swTick(); $("#swStart").textContent = "Пауза"; $("#swLap").disabled = false; }
+    };
+    $("#swLap").onclick = () => {
+      const t = swNow(), prev = laps.length ? laps[laps.length - 1].t : 0;
+      laps.push({ t: t, d: t - prev });
+      $("#swLaps").innerHTML = laps.map((l, i) => "<div><span>Круг " + (i + 1) + "</span><span>" + swFmt(l.d) + "</span><span>" + swFmt(l.t) + "</span></div>").reverse().join("");
+    };
+    $("#swReset").onclick = () => {
+      swRun = false; cancelAnimationFrame(swRaf); swAcc = 0; laps = [];
+      $("#swTime").textContent = "00:00.00"; $("#swLaps").innerHTML = ""; $("#swStart").textContent = "Старт"; $("#swLap").disabled = true;
+    };
+
+    /* таймер */
+    let tmLeft = 300, tmRun = false, tmIv = 0;
+    const tmFmt = s => String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(Math.floor(s % 60)).padStart(2, "0");
+    function tmPaint() { $("#tmTime").textContent = tmFmt(Math.max(0, tmLeft)); }
+    function beep() {
+      try {
+        const ac = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ac.createOscillator(), g = ac.createGain();
+        o.frequency.value = 880; o.connect(g); g.connect(ac.destination);
+        g.gain.setValueAtTime(0.18, ac.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 1.1);
+        o.start(); o.stop(ac.currentTime + 1.1);
+      } catch (e) {}
+    }
+    function setFromInputs() { tmLeft = clamp((+$("#tmMin").value || 0) * 60 + (+$("#tmSec").value || 0), 0, 24 * 3600); tmPaint(); }
+    $("#tmMin").oninput = setFromInputs; $("#tmSec").oninput = setFromInputs;
+    $("#tmStart").onclick = () => {
+      if (tmRun) return;
+      if (tmLeft <= 0) setFromInputs();
+      if (tmLeft <= 0) return;
+      tmRun = true;
+      const end = Date.now() + tmLeft * 1000;
+      tmIv = setInterval(() => {
+        tmLeft = Math.round((end - Date.now()) / 1000);
+        tmPaint();
+        if (tmLeft <= 0) { clearInterval(tmIv); tmRun = false; tmLeft = 0; tmPaint(); beep(); $("#tmTime").textContent = "Время вышло"; }
+      }, 200);
+    };
+    $("#tmStop").onclick = () => { clearInterval(tmIv); tmRun = false; };
+    $("#tmReset").onclick = () => { clearInterval(tmIv); tmRun = false; setFromInputs(); };
+    $$("[data-tm]").forEach(b => b.onclick = () => {
+      clearInterval(tmIv); tmRun = false;
+      const s = +b.dataset.tm;
+      $("#tmMin").value = Math.floor(s / 60); $("#tmSec").value = s % 60;
+      setFromInputs();
+    });
+    setFromInputs();
+  })();
+
 })();
 </script>
 </body>
