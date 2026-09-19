@@ -366,9 +366,9 @@
     <div class="wallet">
       <div class="balance" id="balanceBox">
         <small>Баланс</small>
-        <strong id="balance">5 000</strong>
+        <strong id="balance">500 000</strong>
       </div>
-      <button class="ghost" id="resetBank" title="Вернуть 5 000 демо-монет">Сбросить</button>
+      <button class="ghost" id="resetBank" title="Вернуть 5 000 демо-гривен">Сбросить</button>
     </div>
   </header>
 
@@ -1268,7 +1268,7 @@
     function placeBet(key, amount) {
       if (spinning) return;
       const a = amount || chip;
-      if (!Bank.take(a)) { say("Не хватает монет", "Выбери фишку поменьше или сбрось баланс."); return; }
+      if (!Bank.take(a)) { say("Не хватает денег", "Выбери фишку поменьше или сбрось баланс."); return; }
       clearMarks();
       bets[key] = (bets[key] || 0) + a;
       betLog.push({ key: key, a: a });
@@ -1288,14 +1288,14 @@
       if (spinning || !lastBets) return;
       refundAll(); clearMarks();
       const need = Object.keys(lastBets).reduce((a, k) => a + lastBets[k], 0);
-      if (need > Bank.get()) { Bank.deny(); say("Не хватает монет", "Прошлые ставки — " + fmt(need) + ", а на балансе " + fmt(Bank.get()) + "."); renderBets(); return; }
+      if (need > Bank.get()) { Bank.deny(); say("Не хватает денег", "Прошлые ставки — " + fmt(need) + ", а на балансе " + fmt(Bank.get()) + "."); renderBets(); return; }
       for (const k in lastBets) { bets[k] = lastBets[k]; betLog.push({ key: k, a: lastBets[k] }); }
       Bank.take(need); renderBets();
     };
     $("#doubleBtn").onclick = () => {
       if (spinning) return;
       const t = total(); if (!t) return;
-      if (t > Bank.get()) { Bank.deny(); say("Не хватает монет", "Чтобы удвоить, нужно ещё " + fmt(t - Bank.get()) + "."); return; }
+      if (t > Bank.get()) { Bank.deny(); say("Не хватает денег", "Чтобы удвоить, нужно ещё " + fmt(t - Bank.get()) + "."); return; }
       Object.keys(bets).forEach(k => { const a = bets[k]; bets[k] += a; betLog.push({ key: k, a: a }); });
       Bank.take(t); renderBets();
     };
@@ -1378,15 +1378,15 @@
       const colName = col === "green" ? "Зеро" : col === "red" ? "Красное" : "Чёрное";
       const parity = n === 0 ? "" : n % 2 === 0 ? ", чётное" : ", нечётное";
       if (net > 0) {
-        say(colName + parity, "Выигрыш +" + fmt(net) + " монет", "plus");
+        say(colName + parity, "Выигрыш +" + fmt(net) + " ₴", "plus");
         const f = document.createElement("div"); f.className = "float"; f.textContent = "+" + fmt(net);
         $(".plate").appendChild(f); setTimeout(() => f.remove(), 1900);
       } else if (net === 0) say(colName + parity, "Ставки вернулись, баланс без изменений");
-      else say(colName + parity, "Проигрыш −" + fmt(-net) + " монет");
+      else say(colName + parity, "Проигрыш −" + fmt(-net) + " ₴");
 
       history.unshift(n); history = history.slice(0, 14); store.set("history", history); renderHistory();
       setSpinning(false);
-      if (Bank.get() < 10) say("Монеты закончились", "Нажми «Сбросить», чтобы начать заново.");
+      if (Bank.get() < 10) say("Деньги закончились", "Нажми «Сбросить», чтобы начать заново.");
     };
 
     $$(".chip").forEach(c => c.setAttribute("aria-pressed", String(+c.dataset.v === chip)));
@@ -1421,8 +1421,8 @@
     $("#slotSpin").onclick = () => {
       if (busy) return;
       const b = bet();
-      if (b < 10) { toast(out, "Минимальная ставка — 10 монет."); return; }
-      if (!Bank.take(b)) { toast(out, "Не хватает монет на эту ставку.", false); return; }
+      if (b < 10) { toast(out, "Минимальная ставка — 10₴."); return; }
+      if (!Bank.take(b)) { toast(out, "Не хватает денег на эту ставку.", false); return; }
       busy = true; $("#slotSpin").disabled = true;
       const res = [pick(), pick(), pick()];
       reels.forEach(r => r.classList.remove("hit"));
@@ -1452,7 +1452,7 @@
         const win = Math.round(b * mult);
         if (win) Bank.add(win, true);
         const net = win - b;
-        toast(out, msg + " · " + (net > 0 ? "<b>+" + fmt(net) + "</b> монет" : net === 0 ? "баланс без изменений" : "−" + fmt(-net) + " монет"), net > 0 ? true : net === 0 ? null : false);
+        toast(out, msg + " · " + (net > 0 ? "<b>+" + fmt(net) + "</b> ₴" : net === 0 ? "баланс без изменений" : "−" + fmt(-net) + " ₴"), net > 0 ? true : net === 0 ? null : false);
         busy = false; $("#slotSpin").disabled = false;
       }
     };
@@ -1496,8 +1496,8 @@
       if (live) return;
       const b = bet();
       mines = +$("#mineCount").value;
-      if (b < 10) { toast(out, "Минимальная ставка — 10 монет."); return; }
-      if (!Bank.take(b)) { toast(out, "Не хватает монет на эту ставку.", false); return; }
+      if (b < 10) { toast(out, "Минимальная ставка — 10₴."); return; }
+      if (!Bank.take(b)) { toast(out, "Не хватает денег на эту ставку.", false); return; }
       stake = b; opened = 0; live = true; bombs = new Set();
       while (bombs.size < mines) bombs.add(rnd(25));
       reset(false);
@@ -1528,7 +1528,7 @@
       Bank.add(win, true);
       live = false; reset(true);
       $("#mineStart").disabled = false;
-      toast(out, "Забрано <b>" + fmt(win) + "</b> монет (чистыми +" + fmt(win - stake) + ").", true);
+      toast(out, "Забрано <b>" + fmt(win) + "</b> денег (чистыми +" + fmt(win - stake) + ").", true);
       stake = 0; opened = 0; paintStats();
     }
     $("#mineCash").onclick = cash;
@@ -1581,8 +1581,8 @@
     btn.onclick = () => {
       if (running) { cashOut(); return; }
       const b = bet();
-      if (b < 10) { toast(out, "Минимальная ставка — 10 монет."); return; }
-      if (!Bank.take(b)) { toast(out, "Не хватает монет на эту ставку.", false); return; }
+      if (b < 10) { toast(out, "Минимальная ставка — 10₴."); return; }
+      if (!Bank.take(b)) { toast(out, "Не хватает денег на эту ставку.", false); return; }
       stake = b; cashed = false; mult = 1;
       crashAt = Math.max(1, Math.floor((0.99 / (1 - Math.random())) * 100) / 100);
       const auto = +$("#crashAuto").value || 0;
@@ -1619,7 +1619,7 @@
       cashed = true;
       const win = Math.round(stake * mult);
       Bank.add(win, true);
-      toast(out, "Забрано на " + mult.toFixed(2) + "× — <b>+" + fmt(win - stake) + "</b> монет. Обвал был бы на " + crashAt.toFixed(2) + "×.", true);
+      toast(out, "Забрано на " + mult.toFixed(2) + "× — <b>+" + fmt(win - stake) + "</b> ₴. Обвал был бы на " + crashAt.toFixed(2) + "×.", true);
       stop(false);
     }
     draw([], false);
@@ -1652,8 +1652,8 @@
     });
     $("#diceRoll").onclick = () => {
       const b = bet();
-      if (b < 10) { toast(out, "Минимальная ставка — 10 монет."); return; }
-      if (!Bank.take(b)) { toast(out, "Не хватает монет на эту ставку.", false); return; }
+      if (b < 10) { toast(out, "Минимальная ставка — 10₴."); return; }
+      if (!Bank.take(b)) { toast(out, "Не хватает денег на эту ставку.", false); return; }
       const roll = Math.round(Math.random() * 10000) / 100;
       const win = mode === "under" ? roll < target : roll > target;
       valEl.textContent = roll.toFixed(2);
@@ -1661,8 +1661,8 @@
       if (win) {
         const pay = Math.round(b * payout());
         Bank.add(pay, true);
-        toast(out, "Есть! <b>+" + fmt(pay - b) + "</b> монет при выплате " + payout().toFixed(2) + "×.", true);
-      } else toast(out, "Не зашло: −" + fmt(b) + " монет.", false);
+        toast(out, "Есть! <b>+" + fmt(pay - b) + "</b> денег при выплате " + payout().toFixed(2) + "×.", true);
+      } else toast(out, "Не зашло: −" + fmt(b) + " ₴.", false);
       tape.unshift({ roll: roll, win: win }); tape = tape.slice(0, 12);
       $("#diceTape").innerHTML = tape.map(x => '<span class="' + (x.win ? "hi" : "") + '">' + x.roll.toFixed(2) + "</span>").join("");
     };
@@ -1712,13 +1712,13 @@
       hidden = false; paint(); buttons(false);
       if (payout > 0) Bank.add(payout, true);
       const net = payout - stake;
-      toast(out, text + " · " + (net > 0 ? "<b>+" + fmt(net) + "</b>" : net === 0 ? "ставка вернулась" : "−" + fmt(-net)) + " монет", good);
+      toast(out, text + " · " + (net > 0 ? "<b>+" + fmt(net) + "</b>" : net === 0 ? "ставка вернулась" : "−" + fmt(-net)) + " ₴", good);
       stake = 0;
     }
     dealBtn.onclick = () => {
       const b = bet();
-      if (b < 10) { toast(out, "Минимальная ставка — 10 монет."); return; }
-      if (!Bank.take(b)) { toast(out, "Не хватает монет на эту ставку.", false); return; }
+      if (b < 10) { toast(out, "Минимальная ставка — 10₴."); return; }
+      if (!Bank.take(b)) { toast(out, "Не хватает денег на эту ставку.", false); return; }
       shuffle(); stake = b; hidden = true;
       player = [deck.pop(), deck.pop()];
       dealer = [deck.pop(), deck.pop()];
@@ -1754,7 +1754,7 @@
     standBtn.onclick = stand;
     dblBtn.onclick = () => {
       if (!live || player.length !== 2) return;
-      if (!Bank.take(stake)) { toast(out, "Не хватает монет, чтобы удвоить.", false); return; }
+      if (!Bank.take(stake)) { toast(out, "Не хватает денег, чтобы удвоить.", false); return; }
       stake *= 2;
       player.push(deck.pop()); paint();
       const v = value(player);
